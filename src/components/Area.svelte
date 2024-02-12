@@ -23,11 +23,11 @@
 
   // Configure axes
   let gx, gy;
-  $: d3.select(gy).call(d3.axisLeft(y));
   $: d3.select(gx).call(d3.axisBottom(x));
+  $: d3.select(gy).call(d3.axisLeft(y));
 </script>
 
-<div class="trend-plot">
+<div class="area-plot">
   <svg
     width={dimensions.width}
     height={dimensions.height}
@@ -56,7 +56,9 @@
     <!-- The Axes -->
     <g
       bind:this={gx}
-      transform={`translate(${dimensions.margin.left}, ${dimensions.boundedHeight + dimensions.margin.top})`}
+      transform={`translate(${dimensions.margin.left}, ${
+        dimensions.boundedHeight + dimensions.margin.top
+      })`}
     />
     <g
       bind:this={gy}

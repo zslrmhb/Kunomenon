@@ -13,9 +13,6 @@
   let review_count = [];
   let danmaku_count = [];
   let duration_count = [];
-  let rank_score_count = [];
-
-  let showScatterPlot = 1;
 
   // Configures dimensions
   let dimensions = {
@@ -23,7 +20,7 @@
     height: 500,
     margin: {
       top: 20,
-      right: 10,
+      right: 80,
       bottom: 20,
       left: 80,
     },
@@ -44,7 +41,6 @@
     const dataset5 = await d3.csv("/data/review.csv");
     const dataset6 = await d3.csv("/data/danmaku.csv");
     const dataset7 = await d3.csv("/data/duration.csv");
-    const dataset8 = await d3.csv("/data/rank_score.csv");
     num_video_per_month = dataset.map(d => ({
       month: d3.timeParse("%Y-%m")(d.month),
       count: +d.count,
@@ -73,10 +69,6 @@
       date: d3.timeParse("%Y-%m-%d")(d.date),
       count: +d.duration_seconds,
     }));
-    rank_score_count = dataset8.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.rank_score,
-    }));
     window.addEventListener("resize", updateSize);
     updateSize();
   });
@@ -84,7 +76,7 @@
   // Reponse Chart
   function updateSize() {
     dimensions.width = window.innerWidth * 0.9;
-    dimensions.height = window.innerHeight * 0.4;
+    dimensions.height = window.innerHeight * 0.35;
     dimensions.boundedWidth =
       dimensions.width - dimensions.margin.left - dimensions.margin.right;
     dimensions.boundedHeight =
@@ -93,37 +85,56 @@
 </script>
 
 <main>
-  <h1>KUNomenon</h1>
-  <h2>
-    The Trend Behind 3500+ <a
-      href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
-      target="_blank">Cai Xukun Parody Videos</a
-    >
-    on <strong id="bilibili">Bilibili</strong>
-    #Chinese-Internet-Culture
-  </h2>
+  <div class="heading">
+    <h1>KUNomenon</h1>
+    <h2>
+      The Trend Behind 3500+ <a
+        href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
+        target="_blank"
+        id="bilibili">Cai Xukun Parody Videos</a
+      >
+      on
+      <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
+      #Chinese-Internet-Culture
+    </h2>
+  </div>
   <Area {dimensions} {num_video_per_month} {important_dates} />
-
-  {#if showScatterPlot}
-    <Scatter
-      {dimensions}
-      {rank_score_count}
-      {play_count}
-      {like_count}
-      {review_count}
-      {danmaku_count}
-      {duration_count}
-    />
-  {/if}
+  <Scatter
+    {dimensions}
+    {play_count}
+    {like_count}
+    {review_count}
+    {danmaku_count}
+    {duration_count}
+  />
 </main>
 
 <style>
+  * {
+    font-family: "Trebuchet MS";
+  }
+
   h1,
   h2 {
     text-align: left;
+    margin-left: 3%;
+  }
+
+  h1 {
+    font-size: x-large;
+  }
+  h2 {
+    font-size: large;
   }
 
   #bilibili {
     color: #4574cc;
   }
+
+  /* .heading {
+    background-color: #c8f6e1;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+  } */
 </style>
