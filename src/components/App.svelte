@@ -33,13 +33,13 @@
 
   // Load Data
   onMount(async () => {
-    const dataset = await d3.csv("/data/video_count_per_month.csv");
-    const dataset2 = await d3.json("/data/important_dates.json");
-    const dataset3 = await d3.csv("/data/play.csv");
-    const dataset4 = await d3.csv("/data/like.csv");
-    const dataset5 = await d3.csv("/data/review.csv");
-    const dataset6 = await d3.csv("/data/danmaku.csv");
-    const dataset7 = await d3.csv("/data/duration.csv");
+    const dataset = await d3.csv("/Kunomenon/data/video_count_per_month.csv");
+    const dataset2 = await d3.json("/Kunomenon/data/important_dates.json");
+    const dataset3 = await d3.csv("/Kunomenon/data/play.csv");
+    const dataset4 = await d3.csv("/Kunomenon/data/like.csv");
+    const dataset5 = await d3.csv("/Kunomenon/data/review.csv");
+    const dataset6 = await d3.csv("/Kunomenon/data/danmaku.csv");
+    const dataset7 = await d3.csv("/Kunomenon/data/duration.csv");
     num_video_per_month = dataset.map(d => ({
       month: d3.timeParse("%Y-%m")(d.month),
       count: +d.count,

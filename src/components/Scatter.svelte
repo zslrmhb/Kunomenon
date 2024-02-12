@@ -21,7 +21,7 @@
             : duration_count;
 
   // Sort and get top N poionts
-  let N = 10;
+  let N = 3000;
 
   $: topNData = [...cur_dataset]
     .sort((a, b) => d3.descending(a.count, b.count))
