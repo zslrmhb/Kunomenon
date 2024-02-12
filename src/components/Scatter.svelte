@@ -21,7 +21,7 @@
             : duration_count;
 
   // Sort and get top N poionts
-  const N = 10;
+  let N = 10;
 
   $: topNData = [...cur_dataset]
     .sort((a, b) => d3.descending(a.count, b.count))
@@ -79,8 +79,15 @@
     />
   </svg>
 </div>
+
+<!-- <div class="controls-container"> -->
+<!-- <div class="top-n-filter">
+    <label for="top-n"> Top N Points</label>
+    <input type="number" id="top-n" min="1" max="1000" bind:value={N} />
+  </div> -->
+
 <div class="dataset-controls">
-  {#each ["Play", "Like", "Review", "Duration", "Danmaku"] as dataset}
+  {#each ["Like", "Play", "Review", "Duration", "Danmaku"] as dataset}
     <button
       on:click={() => (activeDataset = dataset.toLowerCase() + "_count")}
       class:active={activeDataset === dataset.toLowerCase() + "_count"}
@@ -90,18 +97,17 @@
   {/each}
 </div>
 
+<!-- </div> -->
+
 <style>
   .dataset-controls {
     text-align: left;
-    padding-right: 4px;
-    
   }
 
   .dataset-controls button {
-    /* padding: 5px 10px; */
     display: block;
-    margin: 5px;
-    padding: 4px;
+    margin: 0.5em;
+    padding: 0.5em;
     border: none;
     background-color: white;
     cursor: pointer;

@@ -31,7 +31,7 @@
   dimensions.boundedHeight =
     dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
 
-  // const prefix = "https://github.com/zslrmhb/Kunomenon/blob/main/static/data/";
+
   // Load Data
   onMount(async () => {
     const dataset = await d3.csv("/data/video_count_per_month.csv");
@@ -73,7 +73,7 @@
     updateSize();
   });
 
-  // Reponse Chart
+  // Reponsive Chart
   function updateSize() {
     dimensions.width = window.innerWidth * 0.9;
     dimensions.height = window.innerHeight * 0.35;
@@ -88,7 +88,7 @@
   <div class="heading">
     <h1>KUNomenon</h1>
     <h2>
-      The Trend Behind 3500+ <a
+      The Trend Behind 3000+ <a
         href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
         target="_blank"
         id="bilibili">Cai Xukun Parody Videos</a
