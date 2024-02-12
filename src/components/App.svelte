@@ -34,16 +34,17 @@
   dimensions.boundedHeight =
     dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
 
+  const prefix = "https://github.com/zslrmhb/Kunomenon/blob/main/static/data/";
   // Load Data
   onMount(async () => {
-    const dataset = await d3.csv("/data/video_count_per_month.csv");
-    const dataset2 = await d3.json("/data/important_dates.json");
-    const dataset3 = await d3.csv("/data/play.csv");
-    const dataset4 = await d3.csv("/data/like.csv");
-    const dataset5 = await d3.csv("/data/review.csv");
-    const dataset6 = await d3.csv("/data/danmaku.csv");
-    const dataset7 = await d3.csv("/data/duration.csv");
-    const dataset8 = await d3.csv("/data/rank_score.csv");
+    const dataset = await d3.csv(prefix + "video_count_per_month.csv");
+    const dataset2 = await d3.json(prefix + "important_dates.json");
+    const dataset3 = await d3.csv(prefix +"/data/play.csv");
+    const dataset4 = await d3.csv(prefix +"/data/like.csv");
+    const dataset5 = await d3.csv(prefix +"/data/review.csv");
+    const dataset6 = await d3.csv(prefix +"/data/danmaku.csv");
+    const dataset7 = await d3.csv(prefix +"/data/duration.csv");
+    const dataset8 = await d3.csv(prefix +"/data/rank_score.csv");
     num_video_per_month = dataset.map(d => ({
       month: d3.timeParse("%Y-%m")(d.month),
       count: +d.count,
