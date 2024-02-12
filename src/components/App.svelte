@@ -31,7 +31,6 @@
   dimensions.boundedHeight =
     dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
 
-
   // Load Data
   onMount(async () => {
     const dataset = await d3.csv("/data/video_count_per_month.csv");
@@ -86,12 +85,16 @@
 
 <main>
   <div class="heading">
-    <h1>KUNomenon</h1>
+    <h1>
+      <a href="https://github.com/zslrmhb/Kunomenon" target="_blank" id="bilibili"
+        >KUNomenon</a
+      >
+    </h1>
     <h2>
-      The Trend Behind 3000+ <a
+      The Trend Behind Top 3000+ <a
         href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
         target="_blank"
-        id="bilibili">Cai Xukun Parody Videos</a
+        id="bilibili">Cai Xukun Videos</a
       >
       on
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
