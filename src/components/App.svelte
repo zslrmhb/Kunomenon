@@ -1,6 +1,7 @@
 <script>
   import * as d3 from "d3";
   import { onMount } from "svelte";
+  // import  zoomState  from "interactive.js";
   import Area from "./Area.svelte";
   import Scatter from "./Scatter.svelte";
   //   import color from "../../static/config/color.json";
@@ -86,8 +87,10 @@
 <main>
   <div class="heading">
     <h1>
-      <a href="https://github.com/zslrmhb/Kunomenon" target="_blank" id="bilibili"
-        >KUNomenon</a
+      <a
+        href="https://github.com/zslrmhb/Kunomenon"
+        target="_blank"
+        id="bilibili">KUNomenon</a
       >
     </h1>
     <h2>

@@ -1,9 +1,9 @@
 <script>
   import * as d3 from "d3";
+  import { sharedXDomain } from "./store.js";
   export let num_video_per_month, important_dates;
   export let dimensions;
 
-  // $: console.log(dimensions.boundedWidth);
   // Configures scales
   $: x = d3
     .scaleTime()
@@ -25,10 +25,57 @@
   let gx, gy;
   $: d3.select(gx).call(d3.axisBottom(x));
   $: d3.select(gy).call(d3.axisLeft(y));
+
+  // Interactivity
+  let brush = d3
+    .brushX()
+    .extent([
+      [0, 0],
+      [dimensions.boundedWidth, dimensions.boundedHeight],
+    ])
+    .on("end", updateChart);
+  let brushGroup;
+  $: if (brushGroup) {
+    d3.select(brushGroup).call(brush);
+    d3.select(brushGroup).on("dblclick", resetChart);
+  }
+
+  function updateChart(event) {
+    const selection = event.selection;
+    if (selection) {
+      const newDomain = [x.invert(selection[0]), x.invert(selection[1])];
+      sharedXDomain.set(newDomain);
+      d3.select(brushGroup).call(brush.move, null);
+    }
+  }
+
+  function resetChart() {
+    sharedXDomain.set(d3.extent(num_video_per_month, d => d.month));
+  }
+
+  // Sync Both the Area and Scatter plot
+  $: if ($sharedXDomain) {
+    x.domain($sharedXDomain);
+    d3.select(gx).transition().duration(500).call(d3.axisBottom(x));
+    d3.select("#area-plot")
+      .select("path")
+      .datum(num_video_per_month) // Re-bind data
+      .transition()
+      .duration(500)
+      .attr("d", area);
+    d3.select("#area-plot")
+      .selectAll("circle")
+      .data(important_dates)
+      .transition()
+      .duration(500)
+      .attr("cx", d => x(d.date))
+      .attr("cy", y(0));
+  }
 </script>
 
 <div class="area-plot">
   <svg
+    id="area-plot"
     width={dimensions.width}
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
@@ -36,7 +83,6 @@
   >
     <!-- The Data Points -->
     <g
-      role="img"
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
       <!-- The Area Chart! -->
@@ -64,6 +110,11 @@
       bind:this={gy}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     />
+    <!-- The Brush -->
+    <g
+      bind:this={brushGroup}
+      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
+    ></g>
   </svg>
 </div>
 
