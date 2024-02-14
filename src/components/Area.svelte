@@ -27,13 +27,14 @@
   $: d3.select(gy).call(d3.axisLeft(y));
 
   // Interactivity
-  let brush = d3
+  $: brush = d3
     .brushX()
     .extent([
       [0, 0],
       [dimensions.boundedWidth, dimensions.boundedHeight],
     ])
     .on("end", updateChart);
+
   let brushGroup;
   $: if (brushGroup) {
     d3.select(brushGroup).call(brush);

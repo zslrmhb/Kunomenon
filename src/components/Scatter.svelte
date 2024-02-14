@@ -25,7 +25,7 @@
   $: d3.select(gy).call(d3.axisLeft(y));
 
   // Interactivity
-  let brush = d3
+  $: brush = d3
     .brushX()
     .extent([
       [0, 0],
