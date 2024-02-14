@@ -6,8 +6,9 @@
     like_count,
     review_count,
     danmaku_count,
-    duration_count;
-
+    duration_count, 
+    tag_count;
+  
   // Configures scales
   $: x = d3
     .scaleTime()
@@ -75,7 +76,9 @@
           ? review_count
           : activeDataset === "danmaku_count"
             ? danmaku_count
-            : duration_count;
+            : activeDataset === "duration_count"
+              ? duration_count
+              : tag_count;
 
   // Sort and get top N poionts
   let N = 10;
@@ -87,6 +90,7 @@
   function isInTopN(dataPoint) {
     return topNData.includes(dataPoint);
   }
+
 </script>
 
 <div class="scatter-plot-wrapper">
@@ -129,6 +133,7 @@
   </svg>
 </div>
 
+
 <!-- <div class="controls-container"> -->
 <!-- <div class="top-n-filter">
     <label for="top-n"> Top N Points</label>
@@ -136,7 +141,7 @@
   </div> -->
 
 <div class="dataset-controls">
-  {#each ["Like", "Play", "Review", "Duration", "Danmaku"] as dataset}
+  {#each ["Like", "Play", "Review", "Duration", "Danmaku", "Tag"] as dataset}
     <button
       on:click={() => (activeDataset = dataset.toLowerCase() + "_count")}
       class:active={activeDataset === dataset.toLowerCase() + "_count"}

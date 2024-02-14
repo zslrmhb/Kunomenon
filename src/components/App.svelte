@@ -4,6 +4,7 @@
   // import  zoomState  from "interactive.js";
   import Area from "./Area.svelte";
   import Scatter from "./Scatter.svelte";
+  import Heatmap from "./Heatmap.svelte";
   //   import color from "../../static/config/color.json";
 
   // Data Container
@@ -14,6 +15,7 @@
   let review_count = [];
   let danmaku_count = [];
   let duration_count = [];
+  let tag_count = [];
 
   // Configures dimensions
   let dimensions = {
@@ -41,6 +43,7 @@
     const dataset5 = await d3.csv("review.csv");
     const dataset6 = await d3.csv("danmaku.csv");
     const dataset7 = await d3.csv("duration.csv");
+    const dataset8 = await d3.csv('tags.csv');
     num_video_per_month = dataset.map(d => ({
       month: d3.timeParse("%Y-%m")(d.month),
       count: +d.count,
@@ -68,6 +71,11 @@
     duration_count = dataset7.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
       count: +d.duration_seconds,
+    }));
+    tag_count = dataset8.map(d => ({
+      date: d3.timeParse("%Y-%m-%d")(d.date),
+      tag: d.variable, 
+      count: d.value
     }));
     window.addEventListener("resize", updateSize);
     updateSize();
@@ -112,7 +120,9 @@
     {review_count}
     {danmaku_count}
     {duration_count}
+    {tag_count}
   />
+  <Heatmap {dimensions} {tag_count} />
 </main>
 
 <style>
