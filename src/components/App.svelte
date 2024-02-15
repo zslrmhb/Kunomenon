@@ -73,9 +73,9 @@
       count: +d.duration_seconds,
     }));
     tag_count = dataset8.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      tag: d.variable, 
-      count: d.value
+      group: d3.timeParse("%Y-%m")(d.group),
+      variable: d.variable,
+      value: d.value
     }));
     window.addEventListener("resize", updateSize);
     updateSize();

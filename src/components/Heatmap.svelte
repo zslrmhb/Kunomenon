@@ -1,43 +1,69 @@
 <script>
-    import * as d3 from "d3";
-    import { sharedXDomain } from "./store.js";
-    export let tag_count;
-    export let dimensions;
+  import * as d3 from "d3";
+  import { sharedXDomain } from "./store.js";
+  export let dimensions;
+  export let tag_count;
 
-    let data = [
-      [10, 20, 30],
-      [40, 50, 60],
-      [70, 80, 90]
-    ];
+  let svg = d3.select("heatmap")
+    .append("svg")
+    .attr("width",dimensions.width)
+    .attr('height',dimensions.height)
+  svg.append('g')
+    .attr('transform', "translate("+dimensions.margin.left+',' + dimensions.margin.top+")");
+
+  // Keep constant scales
+  // $: x = d3
+  // .scaleTime()
+  // .domain(d3.extent(tag_count, d => d.date))
+  // .range([0, dimensions.boundedWidth]);
+
+  $: myGroup = d3.map(tag_count, function(d){return d.group;}).keys()
+  $: myVars = d3.map(tag_count, function(d){return d.variable}).keys()
+
+  $: x = d3.scaleBand()
+    .range([0, dimensions.width])
+    .domain(myGroup)
+    .padding(0.05)
+
+  $: y = d3.scaleBand()
+    .range([height, 0])
+    .domain(myVars)
   
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+  $: myColor = d3.scaleSequential()
+    .interpolator(d3.interpolateInferno)
+    .domain([0,200])
   
-    const colorScale = d3.scaleSequential(d3.interpolateViridis)
-      .domain([0, d3.max(data, d => d3.max(d))]);
-  
-    let heatmapData = [];
-  </script>
-  
-  <svg width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}>
-    <g transform={`translate(${margin.left}, ${margin.top})`}>
-      {#each heatmapData as { row, column, value }}
-        <rect
-          x={(column * width) / data[0].length}
-          y={(row * height) / data.length}
-          width={width / data[0].length}
-          height={height / data.length}
-          fill={colorScale(value)}
-          stroke="white"
+  $: {svg.selectAll()
+    .data(tag_count, function(d){return d.group+":"+d.variable;})
+    .enter()
+    .append('rect')
+      .attr("x", function(d){return x(d.group)})
+      .attr("y", function(d){return y(d.variable)})
+      .attr("rx", 10)
+      .attr("ry", 10)
+      .attr("width", x.bandwidth() )
+      .attr("height", y.bandwidth() )
+      .style("fill", function(d) { return myColor(d.value)} )
+      .style("stroke-width", 4)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+</script>
+
+<!-- <div class='heatmap'>
+  <svg 
+    id = "heatmap-plot",
+    width = {dimensions.width},
+    height = {dimensions.height}, 
+    viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}, 
+    style = "max-width: 100%; height: auto;"
+  >
+    <g transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}>
+      <rect
+        x={function(tag_count){return x(tag_count.group)}}
+        y={function(tag_count){return y(tag_count.variable)}}
         />
-      {/each}
     </g>
   </svg>
-  
-  <style>
-    rect {
-      stroke: #fff;
-    }
-  </style>
-  
+</div> -->
+<div class='heatmap'></div>
