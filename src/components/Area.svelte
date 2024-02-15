@@ -1,6 +1,7 @@
 <script>
   import * as d3 from "d3";
   import { sharedXDomain } from "./store.js";
+  import Tooltip from "./Tooltip.svelte";
   export let num_video_per_month, important_dates;
   export let dimensions;
 
@@ -72,6 +73,27 @@
       .attr("cx", d => x(d.date))
       .attr("cy", y(0));
   }
+
+  // Tooltip
+  let tooltipVisible = true;
+  let tooltipContent = "Hello World!";
+  let tooltipX = 0;
+  let tooltipY = 0;
+
+  function showTooltip(event, d) {
+    tooltipContent = d.count;
+    tooltipVisible = true;
+    tooltipX = event.clientX;
+    tooltipY = event.clientY;
+  }
+
+  function hideTooltip() {
+    tooltipVisible = false;
+  }
+
+  // d3.selectAll("circle")
+  //   .on("mouseover", showTooltip)
+  //   .on("mouseout", hideTooltip);
 </script>
 
 <div class="area-plot">
@@ -126,6 +148,11 @@
       bind:this={brushGroup}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     ></g>
+
+    <!-- Tooltip -->
+    {#if tooltipVisible}
+      <Tooltip {tooltipContent} x={tooltipX} y={tooltipY} />
+    {/if}
   </svg>
 </div>
 
