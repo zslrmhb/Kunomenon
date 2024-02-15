@@ -23,9 +23,9 @@
     height: 500,
     margin: {
       top: 20,
-      right: 80,
+      right: 20,
       bottom: 20,
-      left: 80,
+      left: 90,
     },
   };
 
@@ -43,7 +43,7 @@
     const dataset5 = await d3.csv("review.csv");
     const dataset6 = await d3.csv("danmaku.csv");
     const dataset7 = await d3.csv("duration.csv");
-    const dataset8 = await d3.csv('tags.csv');
+    const dataset8 = await d3.csv("tags.csv");
     num_video_per_month = dataset.map(d => ({
       month: d3.timeParse("%Y-%m")(d.month),
       count: +d.count,
@@ -70,12 +70,12 @@
     }));
     duration_count = dataset7.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.duration_seconds,
+      count: +d.duration,
     }));
     tag_count = dataset8.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
-      tag: d.variable, 
-      count: d.value
+      tag: d.variable,
+      count: d.value,
     }));
     window.addEventListener("resize", updateSize);
     updateSize();

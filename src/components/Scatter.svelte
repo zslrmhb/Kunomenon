@@ -6,9 +6,9 @@
     like_count,
     review_count,
     danmaku_count,
-    duration_count, 
+    duration_count,
     tag_count;
-  
+
   // Configures scales
   $: x = d3
     .scaleTime()
@@ -24,6 +24,18 @@
   let gx, gy;
   $: d3.select(gx).call(d3.axisBottom(x));
   $: d3.select(gy).call(d3.axisLeft(y));
+
+  // Axes Labels
+  const datasetLabels = {
+    play_count: "View Count",
+    like_count: "Like Count",
+    review_count: "Review Count",
+    danmaku_count: "Danmaku Count",
+    duration_count: "Duration Count (minutes)",
+    tag_count: "Tag Count",
+  };
+  let yAxisLabel = "";
+  $: yAxisLabel = datasetLabels[activeDataset];
 
   // Interactivity
   $: brush = d3
@@ -90,7 +102,6 @@
   function isInTopN(dataPoint) {
     return topNData.includes(dataPoint);
   }
-
 </script>
 
 <div class="scatter-plot-wrapper">
@@ -124,7 +135,17 @@
     <g
       bind:this={gy}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
-    />
+    >
+      <text
+        transform="rotate(-90)"
+        x={0 - dimensions.height / 2}
+        y={0 - dimensions.margin.left + 20}
+        text-anchor="middle"
+        style="fill: black;"
+      >
+        {yAxisLabel}
+      </text>
+    </g>
     <!-- Brush  -->
     <g
       bind:this={brushGroup}
@@ -133,7 +154,6 @@
   </svg>
 </div>
 
-
 <!-- <div class="controls-container"> -->
 <!-- <div class="top-n-filter">
     <label for="top-n"> Top N Points</label>
@@ -141,7 +161,7 @@
   </div> -->
 
 <div class="dataset-controls">
-  {#each ["Like", "Play", "Review", "Duration", "Danmaku", "Tag"] as dataset}
+  {#each ["Play", "Like", "Review", "Duration", "Danmaku", "Tag"] as dataset}
     <button
       on:click={() => (activeDataset = dataset.toLowerCase() + "_count")}
       class:active={activeDataset === dataset.toLowerCase() + "_count"}

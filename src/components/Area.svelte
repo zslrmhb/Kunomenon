@@ -110,7 +110,17 @@
     <g
       bind:this={gy}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
-    />
+    >
+      <text
+        transform="rotate(-90)"
+        x={0 - dimensions.height / 2}
+        y={0 - dimensions.margin.left + 20}
+        text-anchor="middle"
+        style="fill: black;"
+      >
+        Video Count
+      </text></g
+    >
     <!-- The Brush -->
     <g
       bind:this={brushGroup}
