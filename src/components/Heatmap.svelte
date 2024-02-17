@@ -4,29 +4,10 @@
   export let dimensions;
   export let tag_count;
 
-  // $: console.log(tag_count);
-  // let svg = d3
-  //   .select("heatmap")
-  //   .append("svg")
-  //   .attr("width", dimensions.width)
-  //   .attr("height", dimensions.height);
-
-  // svg
-  //   .append("g")
-  //   .attr(
-  //     "transform",
-  //     "translate(" + dimensions.margin.left + "," + dimensions.margin.top + ")"
-  //   );
-
-  // Keep constant scales
-  // $: x = d3
-  // .scaleTime()
-  // .domain(d3.extent(tag_count, d => d.date))
-  // .range([0, dimensions.boundedWidth]);
-
   let myGroup = tag_count.map(function(d) {
       return d.group;
     });
+
   $: console.log(myGroup)
 
   const uniqueGroup = new Set(myGroup)
@@ -41,11 +22,16 @@
   const uniqueVarArray = [...uniqueVar]
   $: console.log(uniqueVarArray)
 
+  const xBan = 7.042612419700214; 
+
   $: x = d3
     .scaleBand()
     .range([0, dimensions.width])
-    .domain(uniqueGroupArray)
+    .domain(myGroup)
     .padding(0.05);
+
+  $: console.log(x.bandwidth())
+
   $: y = d3
     .scaleBand()
     .range([dimensions.height, 0])
@@ -56,29 +42,68 @@
   // $: console.log("y " + y.bandwidth());
   $: myColor = d3
     .scaleSequential()
-    .interpolator(d3.interpolateInferno)
+    .interpolator(d3.interpolatePuBu)
     .domain([0, 200]);
 
   // Configure axes
-  // let gx, gy;
-  // $: d3.select(gx).call(d3.axisBottom(x));
-  // $: d3.select(gy).call(d3.axisLeft(y));
+  $: xAxis = d3
+    .scaleTime()
+    .domain(d3.extent(tag_count, d => d.group))
+    .range([0, dimensions.width]);
 
-  // $: {svg.selectAll()
-  //   .data(tag_count, function(d){return d.group+":"+d.variable;})
-  //   .enter()
-  //   .append('rect')
-  //     .attr("x", function(d){return x(d.group)})
-  //     .attr("y", function(d){return y(d.variable)})
-  //     .attr("rx", 10)
-  //     .attr("ry", 10)
-  //     .attr("width", x.bandwidth() )
-  //     .attr("height", y.bandwidth() )
-  //     .style("fill", function(d) { return myColor(d.value)} )
-  //     .style("stroke-width", 4)
-  //     .style("stroke", "none")
-  //     .style("opacity", 0.8)
+  let gx, gy;
+  $: d3.select(gx).call(d3.axisBottom(xAxis));
+  $: d3.select(gy).call(d3.axisLeft(y));
+  // interaction
+  // function handleFocus(event, d){
+  //   handleMouseOver(event, d);
   // }
+
+  // function handleBlur(){
+  //   handleMouseOut();
+  // }
+
+  const mouseover = function(event,d) {
+    tooltip
+      .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  const mousemove = function(event,d) {
+    tooltip
+      .html("The exact value of<br>this cell is: " + d.value)
+      .style("left", (event.x)/2 + "px")
+      .style("top", (event.y)/2 + "px")
+  }
+  const mouseleave = function(event,d) {
+    tooltip
+      .style("opacity", 0)
+    d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+  // let svg = d3.select('#heatmap-plot');
+  // svg.selectAll()
+  //   .on('mouseover', mouseover)
+  //   .on('mousemove', mousemove)
+  //   .on('mouseleave', mouseleave)
+  let svg; 
+  let tooltip = null;
+  function onPointerMove(event){
+    const x0 = x.invert(d3.pointer(event)[0]);
+    tooltip = tag_count[x0];
+  }
+
+  function onPointerLeave(event){
+    tooltip = null;
+  }
+
+  $: d3.select(svg)
+    .on("pointerenter pointermove", onPointerMove)
+    .on("pointerleave", onPointerLeave)
+
+  $: console.log(tooltip)
 </script>
 
 <div class="heatmap-wrapper">
@@ -97,35 +122,30 @@
           id={i}
           x={x(d.group)}
           y={y(d.variable)}
-          width={x.bandwidth()}
+          width={xBan+10}
           height={y.bandwidth()}
           fill={myColor(d.value)}
-          rx={10}
-          ry={10}
-        />
+          rx={0}
+          ry={0}
+          />
       {/each}
-
-      <!-- <rect
-        x={function (tag_count) {
-          return x(tag_count.group);
-        }}
-        y={function (tag_count) {
-          return y(tag_count.variable);
-        }}
-      /> -->
     </g>
+    <g
+    bind:this={gx}
+    transform={`translate(${dimensions.margin.left}, ${
+      dimensions.boundedHeight + dimensions.margin.top
+    })`}
+  />
+    <g
+    bind:this={gy}
+    transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
+  />
 
-    <!-- Axes -->
-    <!-- <g
-      bind:this={gx}
-      transform={`translate(${dimensions.margin.left}, ${
-        dimensions.boundedHeight + dimensions.margin.top
-      })`}
-    /> -->
-    <!-- <g
-      bind:this={gy}
-      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`} -->
-    <!-- /> -->
+  {#if tooltip}
+  <g transform="translate({x(tooltip.date)},{y(tooltip.value)})">
+    <text font-weight="bold">{tooltip.value}</text>
+  </g>
+  {/if}
   </svg>
 </div>
 

@@ -133,7 +133,6 @@
   </svg>
 </div>
 
-
 <!-- <div class="controls-container"> -->
 <!-- <div class="top-n-filter">
     <label for="top-n"> Top N Points</label>
