@@ -24,29 +24,32 @@
   // .domain(d3.extent(tag_count, d => d.date))
   // .range([0, dimensions.boundedWidth]);
 
-  let myGroup = [];
-  $: myGroup = d3
-    .map(tag_count, function (d) {
+  let myGroup = tag_count.map(function(d) {
       return d.group;
-    })
-    .keys();
+    });
+  $: console.log(myGroup)
 
-  let myVars = [];
-  $: myVars = d3
-    .map(tag_count, function (d) {
+  const uniqueGroup = new Set(myGroup)
+  const uniqueGroupArray = [...uniqueGroup]
+  $: console.log(uniqueGroupArray)
+
+  let myVars = tag_count
+    .map(function (d) {
       return d.variable;
-    })
-    .keys();
+    });
+  const uniqueVar = new Set(myVars)
+  const uniqueVarArray = [...uniqueVar]
+  $: console.log(uniqueVarArray)
 
   $: x = d3
     .scaleBand()
     .range([0, dimensions.width])
-    .domain(myGroup)
+    .domain(uniqueGroupArray)
     .padding(0.05);
   $: y = d3
     .scaleBand()
     .range([dimensions.height, 0])
-    .domain(myVars)
+    .domain(uniqueVarArray)
     .padding(0.05);
 
   // $: console.log("x: " + x.bandwidth());
@@ -89,14 +92,14 @@
     <g
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
-      {#each tag_count as tag_count, i}
+      {#each tag_count as d, i}
         <rect
           id={i}
-          x={x(tag_count.group)}
-          y={y(tag_count.variable)}
+          x={x(d.group)}
+          y={y(d.variable)}
           width={x.bandwidth()}
           height={y.bandwidth()}
-          fill={myColor(tag_count.value)}
+          fill={myColor(d.value)}
           rx={10}
           ry={10}
         />
