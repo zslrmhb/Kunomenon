@@ -3,7 +3,7 @@
   // import { sharedXDomain } from "./store.js";
   export let dimensions;
   export let tag_count;
-
+  $: console.log(tag_count)
   let myGroup = tag_count.map(function(d) {
       return d.group;
     });
@@ -21,8 +21,6 @@
   const uniqueVar = new Set(myVars)
   const uniqueVarArray = [...uniqueVar]
   $: console.log(uniqueVarArray)
-
-  const xBan = 7.042612419700214; 
 
   $: x = d3
     .scaleBand()
@@ -54,56 +52,15 @@
   let gx, gy;
   $: d3.select(gx).call(d3.axisBottom(xAxis));
   $: d3.select(gy).call(d3.axisLeft(y));
-  // interaction
-  // function handleFocus(event, d){
-  //   handleMouseOver(event, d);
-  // }
 
-  // function handleBlur(){
-  //   handleMouseOut();
-  // }
+  // Interactivity
+  let hovered = -1;
 
-  const mouseover = function(event,d) {
-    tooltip
-      .style("opacity", 1)
-    d3.select(this)
-      .style("stroke", "black")
-      .style("opacity", 1)
-  }
-  const mousemove = function(event,d) {
-    tooltip
-      .html("The exact value of<br>this cell is: " + d.value)
-      .style("left", (event.x)/2 + "px")
-      .style("top", (event.y)/2 + "px")
-  }
-  const mouseleave = function(event,d) {
-    tooltip
-      .style("opacity", 0)
-    d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
-  }
-  // let svg = d3.select('#heatmap-plot');
-  // svg.selectAll()
-  //   .on('mouseover', mouseover)
-  //   .on('mousemove', mousemove)
-  //   .on('mouseleave', mouseleave)
-  let svg; 
-  let tooltip = null;
-  function onPointerMove(event){
-    const x0 = x.invert(d3.pointer(event)[0]);
-    tooltip = tag_count[x0];
-  }
+  let recorded_mouse_poition = {
+    x: 0,
+    y: 0
+  };
 
-  function onPointerLeave(event){
-    tooltip = null;
-  }
-
-  $: d3.select(svg)
-    .on("pointerenter pointermove", onPointerMove)
-    .on("pointerleave", onPointerLeave)
-
-  $: console.log(tooltip)
 </script>
 
 <div class="heatmap-wrapper">
@@ -122,11 +79,19 @@
           id={i}
           x={x(d.group)}
           y={y(d.variable)}
-          width={xBan+10}
+          width={x.bandwidth()}
           height={y.bandwidth()}
           fill={myColor(d.value)}
           rx={0}
           ry={0}
+          on:mouseover={(event) => { 
+            hovered = i; 
+            recorded_mouse_poition = {
+                x: event.pageX,
+                y: event.pageY
+              }
+            }}
+          on:mouseout={(event) => hovered = -1}
           />
       {/each}
     </g>
@@ -141,12 +106,41 @@
     transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
   />
 
-  {#if tooltip}
+  <!-- {#if tooltip}
   <g transform="translate({x(tooltip.date)},{y(tooltip.value)})">
     <text font-weight="bold">{tooltip.value}</text>
   </g>
-  {/if}
+  {/if} -->
   </svg>
+  <div
+		class={hovered === -1 ? "tooltip-hidden": "tooltip-visible"}
+		style="left: {recorded_mouse_poition.x + 40}px; top: {recorded_mouse_poition.y + 40}px"	
+	>
+		{#if hovered !== -1}
+		    Tag {tag_count[hovered].variable}: { tag_count[hovered].value}
+		{/if}
+	</div>
 </div>
 
-<!-- <div class="heatmap"></div> -->
+<style>
+
+	/* dynamic classes for the tooltip */
+	.tooltip-hidden {
+		visibility: hidden;
+		font-family: "Nunito", sans-serif;
+		width: 200px;
+		position: absolute;
+	}
+
+	.tooltip-visible {
+		font: 15px sans-serif;
+		font-family: "Nunito", sans-serif;
+		visibility: visible;
+		background-color: ghostwhite;
+		border-radius: 5px;
+		width: 100px;
+		color: black;
+		position: absolute;
+		padding: 10px;
+	}
+</style>
