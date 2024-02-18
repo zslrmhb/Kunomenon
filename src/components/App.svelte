@@ -4,7 +4,7 @@
   // import  zoomState  from "interactive.js";
   import Area from "./Area.svelte";
   import Scatter from "./Scatter.svelte";
-  import Heatmap from "./Heatmap.svelte";
+  // import Heatmap from "./Heatmap.svelte";
   //   import color from "../../static/config/color.json";
 
   // Data Container
@@ -122,7 +122,7 @@
     {duration_count}
     {tag_count}
   />
-  <Heatmap {dimensions} {tag_count} />
+  <!-- <Heatmap {dimensions} {tag_count} /> -->
 </main>
 
 <style>

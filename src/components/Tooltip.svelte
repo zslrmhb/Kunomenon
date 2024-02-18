@@ -1,24 +1,24 @@
 <script>
-  export let content = "";
+  export let tooltipContent = "";
   export let x = 0;
   export let y = 0;
 </script>
 
 <div class="tooltip">
-  {content}
+  {tooltipContent}
 </div>
 
 <style>
-  /* .tooltip {
-    /* position: absolute;
+  .tooltip {
+    position: absolute;
     background-color: white;
     padding: 5px;
     border: 1px solid black;
     border-radius: 5px;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s; */
-  /* } */
+    transition: opacity 0.3s;
+  }
   /* .tooltip.svelte-fade {
     opacity: 1;
   } */

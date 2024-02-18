@@ -77,22 +77,23 @@
   // Tooltip
   let tooltipVisible = true;
   let tooltipContent = "Hello World!";
-  let tooltipX = 0;
-  let tooltipY = 0;
+  let tooltipX = 50;
+  let tooltipY = 50;
 
   function showTooltip(event, d) {
     tooltipContent = d.count;
     tooltipVisible = true;
-    tooltipX = event.clientX;
-    tooltipY = event.clientY;
+
+    
+    // tooltipX = event.clientX;
+    // tooltipY = event.clientY;
   }
 
   function hideTooltip() {
     tooltipVisible = false;
   }
-
-  // d3.selectAll("circle")
-  //   .on("mouseover", showTooltip)
+  // d3.selectAll("circle").on("mouseover", showTooltip);
+  // d3.selectAll("circle").on("mouseover", showTooltip);
   //   .on("mouseout", hideTooltip);
 </script>
 
