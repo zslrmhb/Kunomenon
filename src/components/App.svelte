@@ -1,11 +1,8 @@
 <script>
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  // import  zoomState  from "interactive.js";
   import Area from "./Area.svelte";
-  import Scatter from "./Scatter.svelte";
-  // import Heatmap from "./Heatmap.svelte";
-  //   import color from "../../static/config/color.json";
+  import PlotContainer from "./PlotContainer.svelte";
 
   // Data Container
   let num_video_per_month = [];
@@ -73,9 +70,9 @@
       count: +d.duration,
     }));
     tag_count = dataset8.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.group),
-      tag: d.variable,
-      count: +d.value,
+      group: d3.timeParse("%Y-%m")(d.group),
+      variable: d.variable,
+      value: d.value,
     }));
     window.addEventListener("resize", updateSize);
     updateSize();
@@ -111,18 +108,17 @@
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
       #Chinese-Internet-Culture
     </h2>
+    <Area {dimensions} {num_video_per_month} {important_dates} />
+    <PlotContainer
+      {dimensions}
+      {play_count}
+      {like_count}
+      {review_count}
+      {danmaku_count}
+      {duration_count}
+      {tag_count}
+    />
   </div>
-  <Area {dimensions} {num_video_per_month} {important_dates} />
-  <Scatter
-    {dimensions}
-    {play_count}
-    {like_count}
-    {review_count}
-    {danmaku_count}
-    {duration_count}
-    {tag_count}
-  />
-  <!-- <Heatmap {dimensions} {tag_count} /> -->
 </main>
 
 <style>

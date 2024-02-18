@@ -2,12 +2,7 @@
   import * as d3 from "d3";
   import { sharedXDomain } from "./store.js";
   export let dimensions;
-  export let play_count,
-    like_count,
-    review_count,
-    danmaku_count,
-    duration_count,
-    tag_count;
+  export let cur_dataset, activeDataset;
 
   // Configures scales
   $: x = d3
@@ -32,10 +27,11 @@
     review_count: "Review Count",
     danmaku_count: "Danmaku Count",
     duration_count: "Duration Count (minutes)",
-    tag_count: "Tag Count",
   };
   let yAxisLabel = "";
   $: yAxisLabel = datasetLabels[activeDataset];
+
+  $: console.log(cur_dataset);
 
   // Interactivity
   $: brush = d3
@@ -76,21 +72,6 @@
       .attr("cx", d => x(d.date))
       .attr("cy", d => y(d.count));
   }
-
-  let activeDataset = "play_count";
-
-  $: cur_dataset =
-    activeDataset === "play_count"
-      ? play_count
-      : activeDataset === "like_count"
-        ? like_count
-        : activeDataset === "review_count"
-          ? review_count
-          : activeDataset === "danmaku_count"
-            ? danmaku_count
-            : activeDataset === "duration_count"
-              ? duration_count
-              : tag_count;
 
   // Sort and get top N poionts
   let N = 10;
@@ -160,41 +141,8 @@
     <input type="number" id="top-n" min="1" max="1000" bind:value={N} />
   </div> -->
 
-<div class="dataset-controls">
-  {#each ["Play", "Like", "Review", "Duration", "Danmaku", "Tag"] as dataset}
-    <button
-      on:click={() => (activeDataset = dataset.toLowerCase() + "_count")}
-      class:active={activeDataset === dataset.toLowerCase() + "_count"}
-    >
-      {dataset}
-    </button>
-  {/each}
-</div>
-
-<!-- </div> -->
-
 <style>
-  .dataset-controls {
-    text-align: left;
-  }
-
-  .dataset-controls button {
-    display: block;
-    margin: 0.5em;
-    padding: 0.5em;
-    border: none;
-    background-color: white;
-    cursor: pointer;
-  }
-
-  .dataset-controls button.active {
-    font-weight: bold;
-    color: #4574cc;
-    /* border-color: #4574cc; */
-  }
-
-  .scatter-plot-wrapper,
-  .dataset-controls {
+  .scatter-plot-wrapper {
     display: inline-block;
     vertical-align: bottom;
   }
