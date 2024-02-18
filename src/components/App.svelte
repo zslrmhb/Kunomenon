@@ -112,7 +112,7 @@
       #Chinese-Internet-Culture
     </h2>
   </div>
-  <Area {dimensions} {num_video_per_month} {important_dates} />
+  <!-- <Area {dimensions} {num_video_per_month} {important_dates} />
   <Scatter
     {dimensions}
     {play_count}
@@ -121,7 +121,7 @@
     {danmaku_count}
     {duration_count}
     {tag_count}
-  />
+  /> -->
   <Heatmap {dimensions} {tag_count} />
 </main>
 
