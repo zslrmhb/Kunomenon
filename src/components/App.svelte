@@ -4,7 +4,7 @@
   import Area from "./Area.svelte";
   import PlotContainer from "./PlotContainer.svelte";
 
-  import { GoogleTranslate } from "@candidosales/svelte-google-translate";
+  // import { GoogleTranslate } from "@candidosales/svelte-google-translate";
 
   // Data Container
   let num_video_per_month = [];
@@ -15,6 +15,11 @@
   let danmaku_count = [];
   let duration_count = [];
   let tag_count = [];
+
+  // The Top 3 Content Creators
+  let tom_count = [];
+  let yoyo_count = [];
+  let yaw_count = [];
 
   // Configures dimensions
   let dimensions = {
@@ -43,9 +48,12 @@
     const dataset6 = await d3.csv("danmaku.csv");
     const dataset7 = await d3.csv("duration.csv");
     const dataset8 = await d3.csv("tags.csv");
+    const dataset9 = await d3.csv("tom.csv");
+    const dataset10 = await d3.csv("yaw.csv");
+    const dateset11 = await d3.csv("yoyo.csv");
     num_video_per_month = dataset.map(d => ({
-      month: d3.timeParse("%Y-%m")(d.month),
-      count: +d.count,
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
     important_dates = dataset2.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
@@ -91,6 +99,19 @@
       variable: d.variable,
       value: d.value,
     }));
+    tom_count = dataset9.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count
+    }))
+    yoyo_count = dataset10.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count
+    }))
+    yaw_count = dateset11.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count
+    }))
+    // console.log(yaw_count)
     window.addEventListener("resize", updateSize);
     updateSize();
   });
@@ -129,7 +150,7 @@
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
       #Chinese-Internet-Culture
     </h2>
-    <Area {dimensions} {num_video_per_month} {important_dates} />
+    <Area {dimensions} {num_video_per_month} {important_dates} {tom_count} {yoyo_count} {yaw_count}/>
     <PlotContainer
       {dimensions}
       {play_count}

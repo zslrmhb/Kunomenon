@@ -97,25 +97,31 @@
   }
 
   // Tooltip
-  let hovered = -1;
-  let recorded_mouse_position = { x: 0, y: 0 };
-  let tooltip_content = "华罗庚讲课"
+  // let hovered = -1;
+  let hoveredData = null;
+
+  // let tooltip_content = "华罗庚讲课";
 
   function handleMouseOver(event, data) {
     if (isInTopN(data)) {
-      console.log("THIS!");
-      hovered = 1;
-      recorded_mouse_position = { x: event.pageX, y: event.pageY };
+      // console.log("THIS!");
+      hoveredData = {
+        ...data,
+        recorded_mouse_position: { x: event.pageX, y: event.pageY },
+      };
+      // hovered = 1;
     }
   }
+  $: console.log(hoveredData);
 
   function handleMouseOut() {
-    hovered = -1;
+    // hovered = -1;
+    hoveredData = null;
   }
 
   function handleClick(data) {
     if (isInTopN(data)) {
-      window.open("https://www.youtube.com", "_blank");
+      window.open(data.arcurl, "_blank");
     }
   }
 </script>
@@ -190,13 +196,8 @@
   />
 
   <!-- Tooltip  -->
-  {#if hovered !== -1}
-    <Tooltip
-      {tooltip_content}
-      {recorded_mouse_position}
-      chart_type={"scatter"}
-      link={"//player.bilibili.com/player.html?aid=1350175617"}
-    />
+  {#if hoveredData}
+    <Tooltip {hoveredData} chart_type={"scatter"} />
   {/if}
   <!-- https://www.bilibili.com/video/BV1o7421K7pY/?spm_id_from=333.1007.tianma.1-3-3.click&vd_source=b9984a0b10edc46995ca14a3500b11a3 -->
 
