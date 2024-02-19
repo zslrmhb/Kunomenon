@@ -1,15 +1,37 @@
 <script>
     import * as d3 from "d3";
-    // export let dimensions;
+    //export let dimensions;
+    export let initial;
+    export let kunNBA;
+    export let legal;
+    export let shenZ_debut;
+    export let shenZ_parody;
+    export let profTom_dance;
+    export let yaw;
+    export let kunAbor;
 
-    let features = ['A', 'B', 'C', 'D', 'E'];
-    let data = []
-    data[0] ={ A: 1, 
-        B: 2, 
-        C: 1, 
-        D: 6, 
-        E: 9}
-    console.log(data)
+    let curr_dataset = profTom_dance;
+
+    let data = [];
+    let features;
+    features = curr_dataset.map(function(d){
+      return d.feature;
+    });
+
+
+
+    $: console.log('feature ' +typeof(features));
+
+    let dictionary = {}; 
+
+    curr_dataset.forEach(item => {
+     dictionary[item.feature] = item.count;
+    });
+    console.log(dictionary)
+
+    data.unshift(dictionary);
+
+    console.log('data', data);
 
     let width = 600;
     let height = 600;
@@ -38,8 +60,8 @@
 
     let line = d3.line()
         .x(d => d.x)
-        .y(d => d.y);
-    //.curve(d3.curveLinearClosed)
+        .y(d => d.y)
+        .curve(d3.curveLinearClosed);
     let color = 'orange';
 
     function getPathCoordinate(data_point){

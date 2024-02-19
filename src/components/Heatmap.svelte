@@ -3,7 +3,7 @@
   // import { sharedXDomain } from "./store.js";
   export let dimensions;
   export let tag_count;
-  // $: console.log("Tag Count:" + tag_count);
+  $: console.log("Tag Count:" + tag_count);
 
   let myGroup;
   $: myGroup = tag_count.map(function (d) {
