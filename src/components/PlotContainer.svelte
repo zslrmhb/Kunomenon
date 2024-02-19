@@ -1,46 +1,35 @@
 <script>
   import Scatter from "./Scatter.svelte";
   import Heatmap from "./Heatmap.svelte";
-
-  export let play_count,
-    like_count,
-    review_count,
-    danmaku_count,
-    duration_count,
-    tag_count;
   export let dimensions;
+  export let videoInfo, tagCount;
 
-  let activeDataset = "play_count";
+  let activeMetric = "playCount";
 
-  $: cur_dataset =
-    activeDataset === "play_count"
-      ? play_count
-      : activeDataset === "like_count"
-        ? like_count
-        : activeDataset === "review_count"
-          ? review_count
-          : activeDataset === "danmaku_count"
-            ? danmaku_count
-            : activeDataset === "duration_count"
-              ? duration_count
-              : tag_count;
+  $: curDataset = videoInfo.map(d => ({
+    date: d.pubdate,
+    count: +d[activeMetric],
+    arcurl: d.arcurl,
+    aid: d.aid,
+    title: d.title,
+  }));
 </script>
 
 <div class="dataset-controls">
-  {#each ["Play", "Like", "Review", "Duration", "Danmaku", "Tag"] as dataset}
+  {#each ["Play", "Like", "Favorite", "Review", "Duration", "Danmaku", "Tag"] as metric}
     <button
-      on:click={() => (activeDataset = dataset.toLowerCase() + "_count")}
-      class:active={activeDataset === dataset.toLowerCase() + "_count"}
+      on:click={() => (activeMetric = metric.toLowerCase() + "Count")}
+      class:active={activeMetric === metric.toLowerCase() + "Count"}
     >
-      {dataset}
+      {metric}
     </button>
   {/each}
 </div>
 
-{#if activeDataset !== "tag_count"}
-  <Scatter {dimensions} {cur_dataset} {activeDataset}/>
+{#if activeMetric !== "tagCount"}
+  <Scatter {dimensions} {curDataset} {activeMetric} />
 {:else}
-  <Heatmap {dimensions} {tag_count} />
+  <Heatmap {dimensions} {tagCount} />
 {/if}
 
 <style>

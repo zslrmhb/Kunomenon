@@ -7,19 +7,15 @@
   // import { GoogleTranslate } from "@candidosales/svelte-google-translate";
 
   // Data Container
-  let num_video_per_month = [];
-  let important_dates = [];
-  let play_count = [];
-  let like_count = [];
-  let review_count = [];
-  let danmaku_count = [];
-  let duration_count = [];
-  let tag_count = [];
+  let numVideoPerMonth = [];
+  let importantDates = [];
+  let videoInfo = [];
+  let tagCount = [];
 
   // The Top 3 Content Creators
-  let tom_count = [];
-  let yoyo_count = [];
-  let yaw_count = [];
+  let tomCount = [];
+  let yoyoCount = [];
+  let yawCount = [];
 
   // Configures dimensions
   let dimensions = {
@@ -40,78 +36,53 @@
 
   // Load Data
   onMount(async () => {
-    const dataset = await d3.csv("video_count_per_month.csv");
-    const dataset2 = await d3.json("important_dates.json");
-    const dataset3 = await d3.csv("play.csv");
-    const dataset4 = await d3.csv("like.csv");
-    const dataset5 = await d3.csv("review.csv");
-    const dataset6 = await d3.csv("danmaku.csv");
-    const dataset7 = await d3.csv("duration.csv");
-    const dataset8 = await d3.csv("tags.csv");
-    const dataset9 = await d3.csv("tom.csv");
-    const dataset10 = await d3.csv("yaw.csv");
-    const dateset11 = await d3.csv("yoyo.csv");
-    num_video_per_month = dataset.map(d => ({
+    const videoDataset = await d3.csv("video_count_per_month.csv");
+    const importantDatesDataset = await d3.json("important_dates.json");
+    const tomDataset = await d3.csv("tom.csv");
+    const yoyoDataset = await d3.csv("yoyo.csv");
+    const yawDataset = await d3.csv("yaw.csv");
+    const videoInfoDataset = await d3.csv("video_info.csv");
+    const tagDataset = await d3.csv("tags.csv");
+
+    numVideoPerMonth = videoDataset.map(d => ({
       date: d3.timeParse("%Y-%m")(d.pubmonth),
       count: +d.video_count,
     }));
-    important_dates = dataset2.map(d => ({
+    importantDates = importantDatesDataset.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
       title: d.title,
+      link: d.url,
     }));
-    play_count = dataset3.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
-      title: d.title,
-      count: +d.play,
-      arcurl: d.arcurl,
+    videoInfo = videoInfoDataset.map(d => ({
+      pubdate: d3.timeParse("%Y-%m-%d")(d.pubdate),
       aid: d.aid,
-    }));
-    like_count = dataset4.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
-      title: d.title,
-      count: +d.like,
       arcurl: d.arcurl,
-      aid: d.aid,
-    }));
-    review_count = dataset5.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
       title: d.title,
-      count: +d.review,
-      arcurl: d.arcurl,
-      aid: d.aid,
+      playCount: +d.play,
+      reviewCount: +d.review,
+      favoriteCount: +d.favorites,
+      danmakuCount: +d.danmaku,
+      likeCount: +d.like,
+      durationCount: +d.duration_minutes,
     }));
-    danmaku_count = dataset6.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
-      title: d.title,
-      count: +d.danmaku,
-      arcurl: d.arcurl,
-      aid: d.aid,
+
+    tomCount = tomDataset.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    duration_count = dataset7.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
-      title: d.title,
-      count: +d.duration,
-      arcurl: d.arcurl,
-      aid: d.aid,
+    yoyoCount = yoyoDataset.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    tag_count = dataset8.map(d => ({
+    yawCount = yawDataset.map(d => ({
+      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
+    }));
+    tagCount = tagDataset.map(d => ({
       group: d3.timeParse("%Y-%m")(d.group),
       variable: d.variable,
-      value: d.value,
+      value: +d.value,
     }));
-    tom_count = dataset9.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
-      count: +d.video_count
-    }))
-    yoyo_count = dataset10.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
-      count: +d.video_count
-    }))
-    yaw_count = dateset11.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
-      count: +d.video_count
-    }))
-    // console.log(yaw_count)
     window.addEventListener("resize", updateSize);
     updateSize();
   });
@@ -142,7 +113,7 @@
     </h1>
     <h2>
       The Trend Behind Top 3000+ <a
-        href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
+        href="https://www.quora.com/Why-is-chicken-you-too-beautiful-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E-so-popular-in-China-recently"
         target="_blank"
         id="bilibili">Cai Xukun Videos</a
       >
@@ -150,16 +121,15 @@
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
       #Chinese-Internet-Culture
     </h2>
-    <Area {dimensions} {num_video_per_month} {important_dates} {tom_count} {yoyo_count} {yaw_count}/>
-    <PlotContainer
+    <Area
       {dimensions}
-      {play_count}
-      {like_count}
-      {review_count}
-      {danmaku_count}
-      {duration_count}
-      {tag_count}
+      {numVideoPerMonth}
+      {importantDates}
+      {tomCount}
+      {yoyoCount}
+      {yawCount}
     />
+    <PlotContainer {dimensions} {videoInfo} {tagCount} />
   </div>
 </main>
 

@@ -1,0 +1,99 @@
+{/* <script>
+  import * as d3 from "d3";
+  import { sharedXDomain } from "../store.js";
+  import Tooltip from "./Tooltip.svelte";
+  export let dimensions;
+  export let cur_dataset, activeDataset;
+
+
+  
+
+  
+
+  // Interactivity
+  $: brush = d3
+    .brushX()
+    .extent([
+      [0, 0],
+      [dimensions.boundedWidth, dimensions.boundedHeight],
+    ])
+    .on("end", updateChart);
+  let brushGroup;
+  $: if (brushGroup) {
+    d3.select(brushGroup).call(brush);
+    d3.select(brushGroup).on("dblclick", resetChart);
+  }
+
+  function updateChart(event) {
+    const selection = event.selection;
+    if (selection) {
+      const newDomain = [x.invert(selection[0]), x.invert(selection[1])];
+      sharedXDomain.set(newDomain);
+      d3.select(brushGroup).call(brush.move, null);
+    }
+  }
+
+  function resetChart() {
+    sharedXDomain.set(d3.extent(cur_dataset, d => d.date));
+  }
+
+  // Sync Both the Area and Scatter plot
+  $: if ($sharedXDomain) {
+    x.domain($sharedXDomain);
+    d3.select(gx).transition().duration(500).call(d3.axisBottom(x));
+    d3.select("#scatter-plot")
+      .selectAll("circle")
+      .data(cur_dataset)
+      .transition()
+      .duration(500)
+      .attr("cx", d => x(d.date))
+      .attr("cy", d => y(d.count));
+  }
+
+  
+
+  
+
+
+  
+ 
+
+
+</script>
+
+    
+
+   
+
+    <!-- Brush  -->
+    <g
+      bind:this={brushGroup}
+      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
+    ></g>
+  </svg>
+
+
+
+
+  <!-- </div> -->
+</div>
+
+
+
+<style>
+  .scatter-plot-wrapper {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  .slider {
+    /* width: 20px;
+    height: 200px; /* Adjust as per your graph's height */
+    /* padding: 20px 0; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+  }
+
+

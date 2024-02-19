@@ -1,8 +1,8 @@
 <script>
   import * as d3 from "d3";
-  // import { sharedXDomain } from "./store.js";
+  import Tooltip from "./Tooltip.svelte";
   export let dimensions;
-  export let tag_count;
+  export let tagCount;
 
   let myGroup;
   let myVars;
@@ -11,10 +11,10 @@
   let uniqueVar;
   let uniqueVarArray;
 
-  $: myGroup = tag_count.map(function (d) {
+  $: myGroup = tagCount.map(function (d) {
     return d.group;
   });
-  $: myVars = tag_count.map(function (d) {
+  $: myVars = tagCount.map(function (d) {
     return d.variable;
   });
   $: uniqueGroup = new Set(myGroup);
@@ -22,18 +22,19 @@
   $: uniqueVar = new Set(myVars);
   $: uniqueVarArray = [...uniqueVar];
 
+  // Configures scales
   $: x = d3
     .scaleBand()
     .range([0, dimensions.boundedWidth])
     .domain(myGroup)
     .padding(0);
-
   $: y = d3
     .scaleBand()
     .range([dimensions.boundedHeight, 0])
     .domain(uniqueVarArray)
     .padding(0);
 
+  // Configure colors
   $: myColor = d3
     .scaleSequential()
     .interpolator(d3.interpolatePuBu)
@@ -42,7 +43,7 @@
   // Configure axes
   $: xAxis = d3
     .scaleTime()
-    .domain(d3.extent(tag_count, d => d.group))
+    .domain(d3.extent(tagCount, d => d.group))
     .range([0, dimensions.boundedWidth]);
 
   let gx, gy;
@@ -50,48 +51,50 @@
   $: d3.select(gy).call(d3.axisLeft(y));
 
   // Interactivity
-  let hovered = -1;
 
-  let recorded_mouse_poition = {
-    x: 0,
-    y: 0,
-  };
+  // Tooltip
+  let hoveredData = null;
+  function handleMouseOver(event, dataPoint) {
+    hoveredData = {
+      ...dataPoint,
+      recorded_mouse_position: { x: event.pageX, y: event.pageY },
+    };
+  }
+  function handleMouseOut() {
+    hoveredData = null;
+  }
 </script>
 
 <div class="heatmap-wrapper">
   <svg
-    id="heatmap-plot"
     width={dimensions.width}
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
     style="max-width: 100%; height: auto;"
   >
+    <!-- Tags Data  -->
     <g
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
-      {#each tag_count as d, i}
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+      {#each tagCount as data, i}
         <rect
           id={i}
-          x={x(d.group)}
-          y={y(d.variable)}
+          x={x(data.group)}
+          y={y(data.variable)}
           width={x.bandwidth()}
           height={y.bandwidth()}
-          fill={myColor(d.value)}
+          fill={myColor(data.value)}
           rx={0}
           ry={0}
-          on:mouseover={event => {
-            hovered = i;
-            recorded_mouse_poition = {
-              x: event.pageX,
-              y: event.pageY,
-            };
-          }}
-          on:mouseout={event => (hovered = -1)}
+          on:mouseover={event => handleMouseOver(event, data)}
+          on:mouseout={handleMouseOut}
         />
       {/each}
     </g>
+
+    <!-- Axes  -->
     <g
       bind:this={gx}
       transform={`translate(${dimensions.margin.left}, ${
@@ -103,39 +106,16 @@
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     />
   </svg>
-  <div
-    class={hovered === -1 ? "tooltip-hidden" : "tooltip-visible"}
-    style="left: {recorded_mouse_poition.x +
-      40}px; top: {recorded_mouse_poition.y + 40}px"
-  >
-    {#if hovered !== -1}
-      Tag {tag_count[hovered].variable}: {tag_count[hovered].value}
-    {/if}
-  </div>
+
+  <!-- Tooltip  -->
+  {#if hoveredData}
+    <Tooltip {hoveredData} chart_type={"heatmap"} />
+  {/if}
 </div>
 
 <style>
   .heatmap-wrapper {
     display: inline-block;
     vertical-align: bottom;
-  }
-  /* dynamic classes for the tooltip */
-  .tooltip-hidden {
-    visibility: hidden;
-    /* font-family: "Nunito", sans-serif;
-    width: 200px;
-    position: absolute; */
-  }
-
-  .tooltip-visible {
-    font: 15px sans-serif;
-    font-family: "Nunito", sans-serif;
-    visibility: visible;
-    background-color: ghostwhite;
-    border-radius: 5px;
-    width: 100px;
-    color: black;
-    position: absolute;
-    padding: 10px;
   }
 </style>
