@@ -3,35 +3,13 @@
   // import { sharedXDomain } from "./store.js";
   export let dimensions;
   export let tag_count;
-<<<<<<< HEAD
-  $: console.log(tag_count)
-  let myGroup, uniqueGroup, uniqueGroupArray; 
-  $: myGroup = tag_count.map(function(d) {
-      return d.group;
-    });
-=======
   // $: console.log("Tag Count:" + tag_count);
->>>>>>> b2bdd4970d455ea774fc5cf98900e278ff9b34e1
 
   let myGroup;
   $: myGroup = tag_count.map(function (d) {
     return d.group;
   });
 
-<<<<<<< HEAD
-  $: uniqueGroup = new Set(myGroup)
-  $: uniqueGroupArray = [...uniqueGroup]
-  $: console.log(uniqueGroupArray)
-
-  $: myVars = tag_count
-    .map(function (d) {
-      return d.variable;
-    });
-  
-  $: uniqueVar = new Set(myVars)
-  $: uniqueVarArray = [...uniqueVar]
-  $: console.log(uniqueVarArray)
-=======
   // $: console.log("My Group: " + myGroup);
 
   let uniqueGroup;
@@ -51,7 +29,6 @@
   let uniqueVarArray;
   $: uniqueVarArray = [...uniqueVar];
   // $: console.log(uniqueVarArray);
->>>>>>> b2bdd4970d455ea774fc5cf98900e278ff9b34e1
 
   $: x = d3
     .scaleBand()
