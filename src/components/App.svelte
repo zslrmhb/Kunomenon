@@ -52,24 +52,39 @@
       title: d.title,
     }));
     play_count = dataset3.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      title: d.title,
       count: +d.play,
+      arcurl: d.arcurl,
+      aid: d.aid,
     }));
     like_count = dataset4.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      title: d.title,
       count: +d.like,
+      arcurl: d.arcurl,
+      aid: d.aid,
     }));
     review_count = dataset5.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      title: d.title,
       count: +d.review,
+      arcurl: d.arcurl,
+      aid: d.aid,
     }));
     danmaku_count = dataset6.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      title: d.title,
       count: +d.danmaku,
+      arcurl: d.arcurl,
+      aid: d.aid,
     }));
     duration_count = dataset7.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
+      date: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      title: d.title,
       count: +d.duration,
+      arcurl: d.arcurl,
+      aid: d.aid,
     }));
     tag_count = dataset8.map(d => ({
       group: d3.timeParse("%Y-%m")(d.group),
