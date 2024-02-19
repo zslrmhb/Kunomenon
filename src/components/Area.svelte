@@ -1,6 +1,6 @@
 <script>
   import * as d3 from "d3";
-  import { sharedXDomain } from "./store.js";
+  import { sharedXDomain } from "../store.js";
   import Tooltip from "./Tooltip.svelte";
   export let num_video_per_month, important_dates;
   export let dimensions;
@@ -75,26 +75,11 @@
   }
 
   // Tooltip
-  let tooltipVisible = true;
-  let tooltipContent = "Hello World!";
-  let tooltipX = 50;
-  let tooltipY = 50;
-
-  function showTooltip(event, d) {
-    tooltipContent = d.count;
-    tooltipVisible = true;
-
-    
-    // tooltipX = event.clientX;
-    // tooltipY = event.clientY;
-  }
-
-  function hideTooltip() {
-    tooltipVisible = false;
-  }
-  // d3.selectAll("circle").on("mouseover", showTooltip);
-  // d3.selectAll("circle").on("mouseover", showTooltip);
-  //   .on("mouseout", hideTooltip);
+  let hovered = -1;
+  let recorded_mouse_position = { x: 0, y: 0 };
+  let tooltip_content = "44444";
+  $: console.log(hovered);
+  
 </script>
 
 <div class="area-plot">
@@ -118,8 +103,28 @@
       />
 
       <!-- The Important Dates -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y-mouse-events-have-key-events -->
       {#each important_dates as event, i}
-        <circle id={i} cx={x(event.date)} cy={y(0)} r="3" fill="red"></circle>
+      <rect>
+        id={i}
+        
+      </rect>
+        <!-- <circle
+          id={i}
+          cx={x(event.date)}
+          cy={y(-5)}
+          r="5"
+          fill="red"
+          on:mouseover={event => {
+            hovered = 1;
+            recorded_mouse_position = {
+              x: event.pageX,
+              y: event.pageY,
+            };
+          }}
+          on:mouseout={event => (hovered = -1)}
+        /> -->
       {/each}
     </g>
 
@@ -142,20 +147,23 @@
         style="fill: black;"
       >
         Video Count
-      </text></g
-    >
+      </text>
+    </g>
     <!-- The Brush -->
     <g
       bind:this={brushGroup}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     ></g>
-
-    <!-- Tooltip -->
-    {#if tooltipVisible}
-      <Tooltip {tooltipContent} x={tooltipX} y={tooltipY} />
-    {/if}
   </svg>
+
+  <!-- Tooltip -->
+  {#if hovered !== -1}
+    <Tooltip {tooltip_content} {recorded_mouse_position} chart_type={"area"} />
+  {/if}
 </div>
 
 <style>
 </style>
+
+
+<!-- <iframe src="//player.bilibili.com/player.html?aid=1350175617&bvid=BV1oB421678P&cid=1427854872&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe> -->

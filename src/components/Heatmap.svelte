@@ -24,15 +24,15 @@
 
   $: x = d3
     .scaleBand()
-    .range([0, dimensions.width])
+    .range([0, dimensions.boundedWidth])
     .domain(myGroup)
-    .padding(0.05);
+    .padding(0);
 
   $: y = d3
     .scaleBand()
     .range([dimensions.boundedHeight, 0])
     .domain(uniqueVarArray)
-    .padding(0.05);
+    .padding(0);
 
   $: myColor = d3
     .scaleSequential()
@@ -43,7 +43,7 @@
   $: xAxis = d3
     .scaleTime()
     .domain(d3.extent(tag_count, d => d.group))
-    .range([0, dimensions.width]);
+    .range([0, dimensions.boundedWidth]);
 
   let gx, gy;
   $: d3.select(gx).call(d3.axisBottom(xAxis));
@@ -70,6 +70,8 @@
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
       {#each tag_count as d, i}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <rect
           id={i}
           x={x(d.group)}
@@ -100,12 +102,6 @@
       bind:this={gy}
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     />
-
-    <!-- {#if tooltip}
-  <g transform="translate({x(tooltip.date)},{y(tooltip.value)})">
-    <text font-weight="bold">{tooltip.value}</text>
-  </g>
-  {/if} -->
   </svg>
   <div
     class={hovered === -1 ? "tooltip-hidden" : "tooltip-visible"}
@@ -126,9 +122,9 @@
   /* dynamic classes for the tooltip */
   .tooltip-hidden {
     visibility: hidden;
-    font-family: "Nunito", sans-serif;
+    /* font-family: "Nunito", sans-serif;
     width: 200px;
-    position: absolute;
+    position: absolute; */
   }
 
   .tooltip-visible {

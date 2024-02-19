@@ -4,6 +4,8 @@
   import Area from "./Area.svelte";
   import PlotContainer from "./PlotContainer.svelte";
 
+  import { GoogleTranslate } from "@candidosales/svelte-google-translate";
+
   // Data Container
   let num_video_per_month = [];
   let important_dates = [];
@@ -91,6 +93,10 @@
 
 <main>
   <div class="heading">
+    <!-- <GoogleTranslate
+      elementId={"google-translate-element"}
+      options={{ pageLanguage: 'pt', includedLanguages: 'pt,en,zh-CN' }}
+    /> -->
     <h1>
       <a
         href="https://github.com/zslrmhb/Kunomenon"
