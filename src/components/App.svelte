@@ -122,9 +122,14 @@
     {danmaku_count}
     {duration_count}
     {tag_count}
+<<<<<<< HEAD
   />
   <Heatmap {dimensions} {tag_count} /> -->
   <Radar/>
+=======
+  /> -->
+  <Heatmap {dimensions} {tag_count} />
+>>>>>>> b2bdd4970d455ea774fc5cf98900e278ff9b34e1
 </main>
 
 <style>
