@@ -4,22 +4,24 @@
   export let dimensions;
   export let tag_count;
   $: console.log(tag_count)
-  let myGroup = tag_count.map(function(d) {
+  let myGroup, uniqueGroup, uniqueGroupArray; 
+  $: myGroup = tag_count.map(function(d) {
       return d.group;
     });
 
   $: console.log(myGroup)
 
-  const uniqueGroup = new Set(myGroup)
-  const uniqueGroupArray = [...uniqueGroup]
+  $: uniqueGroup = new Set(myGroup)
+  $: uniqueGroupArray = [...uniqueGroup]
   $: console.log(uniqueGroupArray)
 
-  let myVars = tag_count
+  $: myVars = tag_count
     .map(function (d) {
       return d.variable;
     });
-  const uniqueVar = new Set(myVars)
-  const uniqueVarArray = [...uniqueVar]
+  
+  $: uniqueVar = new Set(myVars)
+  $: uniqueVarArray = [...uniqueVar]
   $: console.log(uniqueVarArray)
 
   $: x = d3

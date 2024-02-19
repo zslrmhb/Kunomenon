@@ -5,6 +5,7 @@
   import Area from "./Area.svelte";
   import Scatter from "./Scatter.svelte";
   import Heatmap from "./Heatmap.svelte";
+  import Radar from "./Radar.svelte";
   //   import color from "../../static/config/color.json";
 
   // Data Container
@@ -112,7 +113,7 @@
       #Chinese-Internet-Culture
     </h2>
   </div>
-  <Area {dimensions} {num_video_per_month} {important_dates} />
+  <!-- <Area {dimensions} {num_video_per_month} {important_dates} />
   <Scatter
     {dimensions}
     {play_count}
@@ -122,7 +123,8 @@
     {duration_count}
     {tag_count}
   />
-  <Heatmap {dimensions} {tag_count} />
+  <Heatmap {dimensions} {tag_count} /> -->
+  <Radar/>
 </main>
 
 <style>
