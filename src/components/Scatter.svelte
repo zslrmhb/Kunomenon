@@ -76,6 +76,7 @@
 
   // Sort and get top N poionts
   let N = 1;
+  let topNData;
 
   $: topNData = [...cur_dataset]
     .sort((a, b) => d3.descending(a.count, b.count))
@@ -97,31 +98,26 @@
   }
 
   // Tooltip
-  // let hovered = -1;
   let hoveredData = null;
-
-  // let tooltip_content = "华罗庚讲课";
-
-  function handleMouseOver(event, data) {
-    if (isInTopN(data)) {
-      // console.log("THIS!");
+  function handleMouseOver(event, dataPoint) {
+    // console.log(data);
+    if (isInTopN(dataPoint)) {
+      console.log("THIS!");
       hoveredData = {
-        ...data,
+        ...dataPoint,
         recorded_mouse_position: { x: event.pageX, y: event.pageY },
       };
-      // hovered = 1;
     }
   }
-  $: console.log(hoveredData);
+  // $: console.log(hoveredData);
 
   function handleMouseOut() {
-    // hovered = -1;
     hoveredData = null;
   }
 
-  function handleClick(data) {
-    if (isInTopN(data)) {
-      window.open(data.arcurl, "_blank");
+  function handleClick(dataPoint) {
+    if (isInTopN(dataPoint)) {
+      window.open(dataPoint.arcurl, "_blank");
     }
   }
 </script>
@@ -145,7 +141,7 @@
           id={i}
           cx={x(data.date)}
           cy={y(data.count)}
-          r="5"
+          r="7"
           fill={isInTopN(data) ? "#4574cc" : "gray"}
           on:mouseover={event => handleMouseOver(event, data)}
           on:mouseout={handleMouseOut}
