@@ -181,7 +181,8 @@
     {shenZ_debut} 
     {shenZ_parody} 
     {profTom_dance} 
-    {yaw} 
+    {yaw}
+    {kunAbor}
   />
 
 </main>

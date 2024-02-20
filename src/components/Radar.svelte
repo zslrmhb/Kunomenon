@@ -10,37 +10,52 @@
     export let yaw;
     export let kunAbor;
 
-    let curr_dataset = profTom_dance;
+    let curr_dataset = kunAbor;
 
+    console.log('curr_dataset', curr_dataset);
+
+    // get the data
     let data = [];
-    let features;
-    features = curr_dataset.map(function(d){
-      return d.feature;
-    });
-
-
-
-    $: console.log('feature ' +typeof(features));
 
     let dictionary = {}; 
 
     curr_dataset.forEach(item => {
      dictionary[item.feature] = item.count;
     });
-    console.log(dictionary)
 
     data.unshift(dictionary);
 
     console.log('data', data);
 
+    //set dimensions
     let width = 600;
     let height = 600;
 
-    let radialScale = d3.scaleLinear()
-    .domain([0, 10])
-    .range([0, 250]);
+    //Scale the figure
 
-    let ticks = [2, 4, 6, 8, 10];
+    let max = d3.max(curr_dataset, (d) => Math.abs(d.count));
+    let roundMax = Math.ceil(max/5)*5;
+
+
+    let radialScale = d3.scaleLinear()
+    .domain([0, roundMax])
+    .range([0, 200]);
+
+    function getTicks(max){
+        console.log('max', max);
+        let roundMax = Math.ceil(max/5)*5;
+        let tick = [];
+        console.log('roundMax', roundMax);
+        for(var i = 1; i <= 5; i++){
+            console.log(roundMax/5*i);
+            tick.push(roundMax/5*i);
+        }
+        return tick;
+    }
+
+    let ticks = getTicks(max);
+    console.log('newTicks', ticks);
+    
 
     function angleToCoordinate(angle, value){
         let x = Math.cos(angle) * radialScale(value);
@@ -48,13 +63,22 @@
         return {'x': width/2+x, 'y': height/2+y};
     }
 
+    //Extract features 
+    let features;
+    features = curr_dataset.map(function(d){
+      return d.feature;
+    });
+    
+    $: console.log('feature ' +typeof(features));
+
     let featureData = features.map((f, i) => {
         let angle = (Math.PI/2)+(2*Math.PI*i/features.length);
         return{
             'name': f,
             'angle': angle,
-            'line_coord': angleToCoordinate(angle, 10), 
-            'label_coord': angleToCoordinate(angle, 10.5)
+            'line_coord': angleToCoordinate(angle, roundMax), 
+            'label_coord': angleToCoordinate(angle, roundMax+0.5),
+            'text_angle':(angle*180/Math.PI+90)%360
         }
     })
 
@@ -62,7 +86,9 @@
         .x(d => d.x)
         .y(d => d.y)
         .curve(d3.curveLinearClosed);
-    let color = 'orange';
+
+    //plot the data
+    let color = 'green';
 
     function getPathCoordinate(data_point){
         let coordinates = [];
@@ -73,9 +99,6 @@
         }
         return coordinates;
     }
-
-
-
 </script>
 
 <div class = "radar-wrapper">
@@ -109,9 +132,12 @@
             stroke = "black">
         </line>
         <text
-            x = {data.label_coord.x}
-            y = {data.label_coord.y}> 
-            {data.name}
+            x = {data.label_coord.x+10}
+            y = {data.label_coord.y+5}
+            text-anchor = "middle"
+            transform = {`rotate(${data.text_angle > 90 && data.text_angle < 270 ? data.text_angle + 180 : data.text_angle}, ${data.label_coord.x}, ${data.label_coord.y})`}
+            > 
+            {data.name}S
         </text>
         {/each}
         {#each data as d, i}
