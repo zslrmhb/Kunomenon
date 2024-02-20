@@ -119,12 +119,13 @@
       .transition()
       .duration(500)
       .attr("d", area);
-    d3.select("#area-plot")
+    console.log(d3.select(".area-plot-wrapper #area-plot").selectAll("circle"));
+    d3.select(".area-plot-wrapper #area-plot")
       .selectAll("circle")
       .data(importantDates)
       .transition()
       .duration(500)
-      .attr("cx", d => x(d.pubmonth))
+      .attr("cx", d => x(d.date))
       .attr("cy", y(-8));
   }
 </script>
