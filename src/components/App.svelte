@@ -1,13 +1,12 @@
 <script>
   import * as d3 from "d3";
   import { onMount } from "svelte";
-  // import  zoomState  from "interactive.js";
   import Area from "./Area.svelte";
   import Scatter from "./Scatter.svelte";
   import Heatmap from "./Heatmap.svelte";
   import Radar from "./Radar.svelte";
   //   import color from "../../static/config/color.json";
-
+  
   // Data Container
   let num_video_per_month = [];
   let important_dates = [];
@@ -25,6 +24,21 @@
   let profTom_dance = [];
   let yaw = [];
   let kunAbor = [];
+  
+  import PlotContainer from "./PlotContainer.svelte";
+
+  // import { GoogleTranslate } from "@candidosales/svelte-google-translate";
+
+  // Data Container
+  let numVideoPerMonth = [];
+  let importantDates = [];
+  let videoInfo = [];
+  let tagCount = [];
+
+  // The Top 3 Content Creators
+  let tomCount = [];
+  let yoyoCount = [];
+  let yawCount = [];
 
   // Configures dimensions
   let dimensions = {
@@ -32,9 +46,9 @@
     height: 500,
     margin: {
       top: 20,
-      right: 80,
+      right: 20,
       bottom: 20,
-      left: 80,
+      left: 90,
     },
   };
 
@@ -61,39 +75,52 @@
     const dataset14 = await d3.csv('profTom_dance.csv');
     const dataset15 = await d3.csv('yaw.csv');
     const dataset16 = await d3.csv('cxk_abr.csv');
+    const videoDataset = await d3.csv("video_count_per_month.csv");
+    const importantDatesDataset = await d3.json("important_dates.json");
+    const tomDataset = await d3.csv("tom.csv");
+    const yoyoDataset = await d3.csv("yoyo.csv");
+    const yawDataset = await d3.csv("yaw.csv");
+    const videoInfoDataset = await d3.csv("video_info.csv");
+    const tagDataset = await d3.csv("tags.csv");
 
-    num_video_per_month = dataset.map(d => ({
-      month: d3.timeParse("%Y-%m")(d.month),
-      count: +d.count,
+    numVideoPerMonth = videoDataset.map(d => ({
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    important_dates = dataset2.map(d => ({
+    importantDates = importantDatesDataset.map(d => ({
       date: d3.timeParse("%Y-%m-%d")(d.date),
       title: d.title,
+      link: d.url,
     }));
-    play_count = dataset3.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.play,
+    videoInfo = videoInfoDataset.map(d => ({
+      pubdate: d3.timeParse("%Y-%m-%d")(d.pubdate),
+      aid: d.aid,
+      arcurl: d.arcurl,
+      title: d.title,
+      playCount: +d.play,
+      reviewCount: +d.review,
+      favoriteCount: +d.favorites,
+      danmakuCount: +d.danmaku,
+      likeCount: +d.like,
+      durationCount: +d.duration_minutes,
     }));
-    like_count = dataset4.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.like,
+
+    tomCount = tomDataset.map(d => ({
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    review_count = dataset5.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.review,
+    yoyoCount = yoyoDataset.map(d => ({
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    danmaku_count = dataset6.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.danmaku,
+    yawCount = yawDataset.map(d => ({
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
+      count: +d.video_count,
     }));
-    duration_count = dataset7.map(d => ({
-      date: d3.timeParse("%Y-%m-%d")(d.date),
-      count: +d.duration_seconds,
-    }));
-    tag_count = dataset8.map(d => ({
+    tagCount = tagDataset.map(d => ({
       group: d3.timeParse("%Y-%m")(d.group),
       variable: d.variable,
-      value: d.value
+      value: +d.value,
     }));
     initial = dataset9.map(d => ({
       feature : d.typename, 
@@ -144,6 +171,10 @@
 
 <main>
   <div class="heading">
+    <!-- <GoogleTranslate
+      elementId={"google-translate-element"}
+      options={{ pageLanguage: 'pt', includedLanguages: 'pt,en,zh-CN' }}
+    /> -->
     <h1>
       <a
         href="https://github.com/zslrmhb/Kunomenon"
@@ -153,7 +184,7 @@
     </h1>
     <h2>
       The Trend Behind Top 3000+ <a
-        href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/"
+        href="https://www.quora.com/Why-is-chicken-you-too-beautiful-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E-so-popular-in-China-recently"
         target="_blank"
         id="bilibili">Cai Xukun Videos</a
       >
@@ -161,19 +192,17 @@
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
       #Chinese-Internet-Culture
     </h2>
-  </div>
-  <!-- <Area {dimensions} {num_video_per_month} {important_dates} /> -->
-  <!-- <Scatter
-    {dimensions}
-    {play_count}
-    {like_count}
-    {review_count}
-    {danmaku_count}
-    {duration_count}
-    {tag_count}
-  /> -->
-  <!-- <Heatmap {dimensions} {tag_count} /> -->
-  <Radar
+    <Area
+      {dimensions}
+      {numVideoPerMonth}
+      {importantDates}
+      {tomCount}
+      {yoyoCount}
+      {yawCount}
+    />
+    <PlotContainer {dimensions} {videoInfo} {tagCount} />
+    
+    <Radar
     {dimensions} 
     {initial} 
     {kunNBA} 
@@ -183,8 +212,8 @@
     {profTom_dance} 
     {yaw}
     {kunAbor}
-  />
-
+    />
+  </div>
 </main>
 
 <style>

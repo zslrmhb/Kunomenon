@@ -5,23 +5,25 @@
 		<link rel="icon" href="./favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<link href="./_app/immutable/assets/2.A613lqfp.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.jMa2krAO.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/entry.XWXJX4Fh.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.zMJaRgub.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.lmlCYsqQ.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.pdK9gPQz.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/0.NVj7KE3p.js">
-		<link rel="modulepreload" href="./_app/immutable/nodes/2.DEZlyE6U.js">
+		<link href="./_app/immutable/assets/2.pxjEB33r.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.sTlf73zp.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.8F-FOnHG.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.hwCU2nmv.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.3-eKN36H.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.a3jmZVZ9.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.8hwOWtC0.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.vyfh814k.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.Y7K1w9FV.js">
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">  <main><h1 class="svelte-1e3kht9" data-svelte-h="svelte-1t0ranq">KUNomenon</h1> <h2 class="svelte-1e3kht9" data-svelte-h="svelte-r5c8df">The Trend Behind 3500+ <a href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/" target="_blank">Cai Xukun Parody Videos</a>
-    on <strong id="bilibili" class="svelte-1e3kht9">Bilibili</strong>
-    #Chinese-Internet-Culture</h2> <div class="trend-plot"><svg width="1000" height="500" viewBox="0 0 1000 500" style="max-width: 100%; height: auto;"><g role="img" transform="translate(80, 20)"><path fill="#cce5df" stroke="#69b3a2" stroke-width="1.5"></path></g><g transform="translate(80, 480)"></g><g transform="translate(80, 20)"></g></svg> </div> <div class="scatter-plot svelte-1faffki"><svg width="1000" height="500" viewBox="0 0 1000 500" style="max-width: 100%; height: auto;"><g transform="translate(80, 480)"></g><g transform="translate(80, 20)"></g></svg> </div> </main> 
+		<div style="display: contents">  <main class="svelte-3pt014"><div class="heading svelte-3pt014"> <h1 class="svelte-3pt014" data-svelte-h="svelte-esehcj"><a href="https://github.com/zslrmhb/Kunomenon" target="_blank" id="bilibili" class="svelte-3pt014">KUNomenon</a></h1> <h2 class="svelte-3pt014" data-svelte-h="svelte-n4801w">The Trend Behind Top 3000+ <a href="https://technode.com/2019/04/15/bilibili-threatened-with-lawsuit-about-videos-mocking-chinese-idol/" target="_blank" id="bilibili" class="svelte-3pt014">Cai Xukun Videos</a>
+      on
+      <a href="http://bilibili.com" target="_blank" id="bilibili" class="svelte-3pt014">Bilibili</a>
+      #Chinese-Internet-Culture</h2> <div class="area-plot"><svg id="area-plot" width="1000" height="500" viewBox="0 0 1000 500" style="max-width: 100%; height: auto;"><g transform="translate(90, 20)"><path fill="#cce5df" stroke="#69b3a2" stroke-width="1.5"></path></g><g transform="translate(90, 480)"></g><g transform="translate(90, 20)"><text transform="rotate(-90)" x="-250" y="-70" text-anchor="middle" style="fill: black;">Video Count</text></g><g transform="translate(90, 20)"></g></svg>  </div>   <div class="dataset-controls svelte-199rz51"><button class="svelte-199rz51 active">Play </button><button class="svelte-199rz51">Like </button><button class="svelte-199rz51">Review </button><button class="svelte-199rz51">Duration </button><button class="svelte-199rz51">Danmaku </button><button class="svelte-199rz51">Tag </button></div> <div class="scatter-plot-wrapper svelte-1um7yr4"><svg id="scatter-plot" width="1000" height="500" viewBox="0 0 1000 500" style="max-width: 100%; height: auto;"><g transform="translate(90, 20)"></g><g transform="translate(90, 480)"></g><g transform="translate(90, 20)"><text transform="rotate(-90)" x="-250" y="-70" text-anchor="middle" style="fill: black;">View Count</text></g><g transform="translate(90, 20)"></g></svg></div> <div class="slider svelte-1um7yr4"><label for="top-n-slider">Top N: 1</label> <input type="range" id="top-n-slider" min="1" max="100" value="1" orient="vertical">    </div>  </div> </main> 
 			
 			<script>
 				{
-					__sveltekit_1xayeta = {
+					__sveltekit_cvu0yg = {
 						base: new URL(".", location).pathname.slice(0, -1)
 					};
 
@@ -30,8 +32,8 @@
 					const data = [null,null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.jMa2krAO.js"),
-						import("./_app/immutable/entry/app.lmlCYsqQ.js")
+						import("./_app/immutable/entry/start.sTlf73zp.js"),
+						import("./_app/immutable/entry/app.a3jmZVZ9.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element, {
 							node_ids: [0, 2],

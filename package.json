@@ -17,6 +17,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@candidosales/svelte-google-translate": "^0.0.15",
 		"d3": "^7.8.5"
 	}
 }
