@@ -6,8 +6,8 @@
 {#if chart_type === "scatter"}
   <div
     class="tooltip-scatter"
-    style="left: {hoveredData.recorded_mouse_position.x}px; top: {hoveredData
-      .recorded_mouse_position.y}px"
+    style="left: {hoveredData.recorded_mouse_position
+      .x}px; bottom: {hoveredData.recorded_mouse_position.y}px"
   >
     <iframe
       src={"//player.bilibili.com/player.html?aid=" + hoveredData.aid}

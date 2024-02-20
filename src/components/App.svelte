@@ -45,7 +45,7 @@
     const tagDataset = await d3.csv("tags.csv");
 
     numVideoPerMonth = videoDataset.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
       count: +d.video_count,
     }));
     importantDates = importantDatesDataset.map(d => ({
@@ -67,15 +67,15 @@
     }));
 
     tomCount = tomDataset.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
       count: +d.video_count,
     }));
     yoyoCount = yoyoDataset.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
       count: +d.video_count,
     }));
     yawCount = yawDataset.map(d => ({
-      date: d3.timeParse("%Y-%m")(d.pubmonth),
+      pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
       count: +d.video_count,
     }));
     tagCount = tagDataset.map(d => ({

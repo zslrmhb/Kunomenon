@@ -65,8 +65,9 @@
   }
 </script>
 
-<div class="heatmap-wrapper">
+<div class="heatmap-plot-wrapper">
   <svg
+    id="heatmap-plot"
     width={dimensions.width}
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
@@ -114,7 +115,7 @@
 </div>
 
 <style>
-  .heatmap-wrapper {
+  .heatmap-plot-wrapper {
     display: inline-block;
     vertical-align: bottom;
   }

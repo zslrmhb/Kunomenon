@@ -1,7 +1,9 @@
 <script>
   import * as d3 from "d3";
-  export let dimensions, curDataset, activeMetric;
+  import { sharedXDomain } from "../store.js";
   import Tooltip from "./Tooltip.svelte";
+
+  export let dimensions, curDataset, activeMetric;
 
   // Configures scales
   $: x = d3
@@ -71,22 +73,66 @@
     topNData = [...curDataset]
       .sort((a, b) => d3.descending(a.count, b.count))
       .slice(0, N);
-    d3.select(".scatter-plot-wrapper .scatter-plot")
+    d3.select("#scatter-plot")
       .selectAll("circle")
       .data(curDataset)
       .attr("fill", d => (isInTopN(d) ? "#4574cc" : "gray"))
       .style("cursor", d => (isInTopN(d) ? "pointer" : "default"));
   }
+
+  // Brush
+  $: brush = d3
+    .brushX()
+    .extent([
+      [0, 0],
+      [dimensions.boundedWidth, dimensions.boundedHeight],
+    ])
+    .on("end", updateChart);
+  let brushGroup;
+  $: if (brushGroup) {
+    d3.select(brushGroup).call(brush);
+    d3.select(brushGroup).on("dblclick", resetChart);
+  }
+
+  function updateChart(event) {
+    const selection = event.selection;
+    if (selection) {
+      const newDomain = [x.invert(selection[0]), x.invert(selection[1])];
+      sharedXDomain.set(newDomain);
+      d3.select(brushGroup).call(brush.move, null);
+    }
+  }
+  function resetChart() {
+    sharedXDomain.set(d3.extent(curDataset, d => d.date));
+  }
+
+  // Sync Both the Area and Scatter plot
+  $: if ($sharedXDomain) {
+    x.domain($sharedXDomain);
+    d3.select(gx).transition().duration(500).call(d3.axisBottom(x));
+    d3.select("#scatter-plot")
+      .selectAll("circle")
+      .data(curDataset)
+      .transition()
+      .duration(500)
+      .attr("cx", d => x(d.date))
+      .attr("cy", d => y(d.count));
+  }
 </script>
 
 <div class="scatter-plot-wrapper">
   <svg
-    class="scatter-plot"
+    id="scatter-plot"
     width={dimensions.width}
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
     style="max-width: 100%; height: auto;"
   >
+    <!-- Brush  -->
+    <g
+      bind:this={brushGroup}
+      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
+    ></g>
     <g
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
