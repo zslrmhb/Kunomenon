@@ -22,7 +22,7 @@
   let shenZ_debut = [];
   let shenZ_parody = [];
   let profTom_dance = [];
-  let yaw = [];
+  let yawRadar = [];
   let kunAbor = [];
   
   import PlotContainer from "./PlotContainer.svelte";
@@ -73,7 +73,7 @@
     const dataset12 = await d3.csv('shenZ_debut.csv');
     const dataset13 = await d3.csv('shenZ_parody.csv');
     const dataset14 = await d3.csv('profTom_dance.csv');
-    const dataset15 = await d3.csv('yaw.csv');
+    const dataset15 = await d3.csv('yawRadar.csv');
     const dataset16 = await d3.csv('cxk_abr.csv');
     const videoDataset = await d3.csv("video_count_per_month.csv");
     const importantDatesDataset = await d3.json("important_dates.json");
@@ -146,7 +146,7 @@
       feature : d.typename,
       count : d.count
     }));
-    yaw = dataset15.map(d => ({
+    yawRadar = dataset15.map(d => ({
       feature : d.typename,
       count : d.count
     }));
@@ -210,7 +210,7 @@
     {shenZ_debut} 
     {shenZ_parody} 
     {profTom_dance} 
-    {yaw}
+    {yawRadar}
     {kunAbor}
     />
   </div>
