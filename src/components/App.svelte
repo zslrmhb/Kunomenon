@@ -23,7 +23,7 @@
   let shenZ_debut = [];
   let shenZ_parody = [];
   let profTom_dance = [];
-  let yaw = [];
+  let yawRadar = [];
   let kunAbor = [];
 
   // Configures dimensions
@@ -59,7 +59,7 @@
     const dataset12 = await d3.csv('shenZ_debut.csv');
     const dataset13 = await d3.csv('shenZ_parody.csv');
     const dataset14 = await d3.csv('profTom_dance.csv');
-    const dataset15 = await d3.csv('yaw.csv');
+    const dataset15 = await d3.csv('yawRadar.csv');
     const dataset16 = await d3.csv('cxk_abr.csv');
 
     num_video_per_month = dataset.map(d => ({
@@ -119,7 +119,7 @@
       feature : d.typename,
       count : d.count
     }));
-    yaw = dataset15.map(d => ({
+    yawRadar = dataset15.map(d => ({
       feature : d.typename,
       count : d.count
     }));
@@ -181,7 +181,7 @@
     {shenZ_debut} 
     {shenZ_parody} 
     {profTom_dance} 
-    {yaw}
+    {yawRadar}
     {kunAbor}
   />
 
