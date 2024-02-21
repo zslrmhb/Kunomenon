@@ -11,6 +11,7 @@
   let importantDates = [];
   let videoInfo = [];
   let tagCount = [];
+  let typeCount = [];
 
   // The Top 3 Content Creators
   let tomCount = [];
@@ -43,6 +44,7 @@
     const yawDataset = await d3.csv("yaw.csv");
     const videoInfoDataset = await d3.csv("video_info.csv");
     const tagDataset = await d3.csv("tags.csv");
+    const typeDataset = await d3.csv("radar_chart.csv");
 
     numVideoPerMonth = videoDataset.map(d => ({
       pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
@@ -82,6 +84,11 @@
       group: d3.timeParse("%Y-%m")(d.group),
       variable: d.variable,
       value: +d.value,
+    }));
+    typeCount = typeDataset.map(d => ({
+      year: +d.year,
+      type: d.type,
+      count: +d.percent,
     }));
     window.addEventListener("resize", updateSize);
     updateSize();
@@ -147,7 +154,7 @@
     {yoyoCount}
     {yawCount}
   />
-  <PlotContainer {dimensions} {videoInfo} {tagCount} />
+  <PlotContainer {dimensions} {videoInfo} {tagCount} {typeCount}/>
 </main>
 
 <style>

@@ -1,8 +1,9 @@
 <script>
   import Scatter from "./Scatter.svelte";
   import Heatmap from "./Heatmap.svelte";
+  import Radar from "./Radar.svelte";
   export let dimensions;
-  export let videoInfo, tagCount;
+  export let videoInfo, tagCount, typeCount;
 
   let activeMetric = "playCount";
 
@@ -16,7 +17,7 @@
 </script>
 
 <div class="dataset-controls">
-  {#each ["Play", "Like", "Favorite", "Review", "Duration", "Danmaku", "Tag"] as metric}
+  {#each ["Play", "Like", "Favorite", "Review", "Duration", "Danmaku", "Tag", "Type"] as metric}
     <button
       on:click={() => (activeMetric = metric.toLowerCase() + "Count")}
       class:active={activeMetric === metric.toLowerCase() + "Count"}
@@ -25,10 +26,12 @@
     </button>
   {/each}
 </div>
-{#if activeMetric !== "tagCount"}
-  <Scatter {dimensions} {curDataset} {activeMetric} />
-{:else}
+{#if activeMetric === "tagCount"}
   <Heatmap {dimensions} {tagCount} />
+{:else if activeMetric === "typeCount"}
+  <Radar {typeCount} />
+{:else}
+  <Scatter {dimensions} {curDataset} {activeMetric} />
 {/if}
 
 <style>
