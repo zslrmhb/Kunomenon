@@ -78,7 +78,7 @@
     visibility: visible;
     font: 1em sans-serif;
     font-family: "Nunito", sans-serif;
-    width: 10%;
+    width: 20%;
     padding: 1em;
     border: 1px solid #ccc; /* Light grey border */
     border-radius: 5px;

@@ -34,8 +34,6 @@
     .y1(d => y(d.count))
     .curve(d3.curveMonotoneX);
 
-  // Annotation
-
   // Interactivity
 
   // Top 3 content creators
@@ -209,16 +207,16 @@
           {#if i == 2}
             <line
               class="annotation-line"
-              x1={x(data.date)}
-              y1={interpolateYCoordinate(data.date) - 70}
-              x2={x(data.date)}
-              y2={interpolateYCoordinate(data.date) - 15}
+              x1={x(data.date) + 60}
+              y1={interpolateYCoordinate(data.date)}
+              x2={x(data.date) + 20}
+              y2={interpolateYCoordinate(data.date)}
               marker-end="url(#arrowhead)"
             />
             <text
               class="anotation-text"
-              x={x(data.date) - 30}
-              y={interpolateYCoordinate(data.date) - 75}
+              x={x(data.date) + 65}
+              y={interpolateYCoordinate(data.date) + 5}
               style="fill: black;"
             >
               Click me!
@@ -284,16 +282,10 @@
 </div>
 
 <style>
-  h3 {
-    font-size: 0.5em;
-  }
-
-  /* .creator-title {
-    margin: 1em;
-  } */
   .area-plot-wrapper {
     padding-top: 2em;
     padding-left: 2em;
+    /* padding-right: -1em; */
     /* display: flex; */
     /* align-items: flex-start; */
     /* justify-content: space-between; */

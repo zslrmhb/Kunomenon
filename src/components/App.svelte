@@ -22,7 +22,7 @@
     width: 1000,
     height: 500,
     margin: {
-      top: 20,
+      top: 30,
       right: 0,
       bottom: 20,
       left: 90,
@@ -121,14 +121,21 @@
       </h2>
     </div>
     <p class="context-description">
-      Cai Xukun, alias KUN, is a Chinese pop idol who rose to fame on Bilibili
-      (video sharing site) with his song "Because You Are So Beautiful," known
-      for its misheard lyrics, his amusing yet iconic dance with the
-      basketball, the outfit, and the hairstyle. His prominence grew in the
-      controversy with him being selected as the Chinese NBA ambassador in
-      early 2019, and subsequently (for you to explore) on 2022. Up until
-      today, he still serve as a prominant figure in Chinese internet culture,
-      and the top parody source.
+      <a
+        href="https://en.wikipedia.org/wiki/Cai_Xukun"
+        target="_blank"
+        id="bilibili">Cai Xukun</a
+      >, a.k.a. KUN, is a Chinese pop idol who rose to fame on Bilibili (video
+      sharing site) with his song
+      <a
+        href="https://www.bilibili.com/video/BV1J4411v7g6/?spm_id_from=333.337.search-card.all.click"
+        target="_blank"
+        id="bilibili">"Just Because You Are So Beautiful"</a
+      >, which was known for its misheard lyrics, his amusing yet iconic dance
+      with the basketball, the outfit, and the hairstyle. His prominence grew
+      in the controversy with him being selected as the Chinese NBA ambassador
+      in early 2019. Until today, he is still a prominant figure in Chinese
+      internet culture and parody source.
     </p>
   </div>
 
@@ -150,7 +157,7 @@
 
   h1,
   h2 {
-    margin-left: 1%;
+    margin-left: 2%;
   }
 
   h1 {
@@ -167,10 +174,11 @@
     font-size: medium;
     color: white;
   }
+
   .content-container {
     padding-top: 1em;
     padding-left: 7em;
-    padding-right: 5em;
+    padding-right: 7em;
     padding-bottom: 1em;
     margin: -1em;
     margin-bottom: 0.5em;
@@ -181,12 +189,12 @@
   }
 
   .heading-container {
-    flex: 0 0 50%; 
-    margin: 0.5em; 
+    flex: 0 0 50%;
+    margin: 0.5em;
   }
 
   .context-description {
-    flex: 0 0 50%; 
+    flex: 0 0 50%;
     text-align: left;
   }
 

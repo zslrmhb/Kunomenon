@@ -5,6 +5,8 @@
 
   export let dimensions, curDataset, activeMetric;
 
+  
+
   // Configures scales
   $: x = d3
     .scaleTime()
@@ -184,16 +186,16 @@
           {#if topNData[0]?.aid === data?.aid}
             <line
               class="annotation-line"
-              x1={x(data.date)}
-              y1={dimensions.boundedHeight / 4}
-              x2={x(data.date)}
-              y2={y(data.count) + 20}
+              x1={x(data.date) + 60}
+              y1={y(data.count)}
+              x2={x(data.date) + 20}
+              y2={y(data.count)}
               marker-end="url(#arrowhead)"
             />
             <text
               class="anotation-text"
-              x={x(data.date) - 35}
-              y={dimensions.boundedHeight / 4 + 15}
+              x={x(data.date) + 65}
+              y={y(data.count) + 5}
               style="fill: black;"
             >
               Click me!
