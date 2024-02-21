@@ -181,14 +181,13 @@
   }
 
   .heading-container {
-    flex: 0 0 50%; /* Assign 30% of the space to the heading container */
-    margin: 0.5em; /* Adjust margins as needed */
+    flex: 0 0 50%; 
+    margin: 0.5em; 
   }
 
   .context-description {
-    flex: 0 0 50%; /* Assign 70% of the space to the paragraph */
+    flex: 0 0 50%; 
     text-align: left;
-    /* Additional styling for the paragraph */
   }
 
   #bilibili {
