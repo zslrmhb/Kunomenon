@@ -16,14 +16,8 @@
   let danmaku_count = [];
   let duration_count = [];
   let tag_count = [];
-  let initial = [];
-  let kunNBA = [];
-  let legal = [];
-  let shenZ_debut = [];
-  let shenZ_parody = [];
-  let profTom_dance = [];
-  let yawRadar = [];
-  let kunAbor = [];
+  let typeCount = []; 
+
   
   import PlotContainer from "./PlotContainer.svelte";
 
@@ -67,14 +61,6 @@
     const dataset6 = await d3.csv("danmaku.csv");
     const dataset7 = await d3.csv("duration.csv");
     const dataset8 = await d3.csv('tags.csv');
-    const dataset9 = await d3.csv('initial_debut.csv');
-    const dataset10 = await d3.csv('kunNBA.csv');
-    const dataset11 = await d3.csv('legalIssue.csv');
-    const dataset12 = await d3.csv('shenZ_debut.csv');
-    const dataset13 = await d3.csv('shenZ_parody.csv');
-    const dataset14 = await d3.csv('profTom_dance.csv');
-    const dataset15 = await d3.csv('yawRadar.csv');
-    const dataset16 = await d3.csv('cxk_abr.csv');
     const videoDataset = await d3.csv("video_count_per_month.csv");
     const importantDatesDataset = await d3.json("important_dates.json");
     const tomDataset = await d3.csv("tom.csv");
@@ -82,6 +68,7 @@
     const yawDataset = await d3.csv("yaw.csv");
     const videoInfoDataset = await d3.csv("video_info.csv");
     const tagDataset = await d3.csv("tags.csv");
+    const typeDataset = await d3.csv("radarChart.csv");
 
     numVideoPerMonth = videoDataset.map(d => ({
       pubmonth: d3.timeParse("%Y-%m")(d.pubmonth),
@@ -122,37 +109,10 @@
       variable: d.variable,
       value: +d.value,
     }));
-    initial = dataset9.map(d => ({
-      feature : d.typename, 
-      count : d.count
-    }));
-    kunNBA = dataset10.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    legal = dataset11.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    shenZ_debut = dataset12.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    shenZ_parody = dataset13.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    profTom_dance = dataset14.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    yawRadar = dataset15.map(d => ({
-      feature : d.typename,
-      count : d.count
-    }));
-    kunAbor = dataset16.map(d => ({
-      feature : d.typename,
-      count : d.count
+    typeCount = typeDataset.map(d => ({
+      year: +d.year, 
+      type: d.type,
+      count: +d.percent,
     }));
     window.addEventListener("resize", updateSize);
     updateSize();
@@ -192,7 +152,7 @@
       <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
       #Chinese-Internet-Culture
     </h2>
-    <Area
+    <!-- <Area
       {dimensions}
       {numVideoPerMonth}
       {importantDates}
@@ -201,17 +161,9 @@
       {yawCount}
     />
     <PlotContainer {dimensions} {videoInfo} {tagCount} />
-    
+     -->
     <Radar
-    {dimensions} 
-    {initial} 
-    {kunNBA} 
-    {legal} 
-    {shenZ_debut} 
-    {shenZ_parody} 
-    {profTom_dance} 
-    {yawRadar}
-    {kunAbor}
+    {typeCount}
     />
   </div>
 </main>
