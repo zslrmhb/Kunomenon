@@ -1,6 +1,6 @@
 <script>
   import * as d3 from "d3";
-  import { sharedXDomain } from "../store.js";
+  import { sharedXDomain, isZoom } from "../store.js";
   import Tooltip from "./Tooltip.svelte";
 
   export let dimensions, curDataset, activeMetric;
@@ -42,6 +42,7 @@
       hoveredData = {
         ...dataPoint,
         recorded_mouse_position: { x: event.pageX, y: event.pageY },
+        activeMetric: yAxisLabel,
       };
     }
   }
@@ -100,10 +101,12 @@
       const newDomain = [x.invert(selection[0]), x.invert(selection[1])];
       sharedXDomain.set(newDomain);
       d3.select(brushGroup).call(brush.move, null);
+      isZoom.set(true);
     }
   }
   function resetChart() {
     sharedXDomain.set(d3.extent(curDataset, d => d.date));
+    isZoom.set(false);
   }
 
   // Sync Both the Area and Scatter plot
@@ -120,6 +123,20 @@
   }
 </script>
 
+<!-- Slider -->
+<div class="slider">
+  <label for="top-n-slider">Top {N}:</label>
+  <input
+    type="range"
+    id="top-n-slider"
+    min="1"
+    max="100"
+    value={N}
+    on:input={handleSliderChange}
+    orient="vertical"
+  />
+</div>
+
 <div class="scatter-plot-wrapper">
   <svg
     id="scatter-plot"
@@ -127,7 +144,18 @@
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
     style="max-width: 100%; height: auto;"
-  >
+    ><defs>
+      <marker
+        id="arrowhead"
+        markerWidth="10"
+        markerHeight="7"
+        refX="0"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+      </marker>
+    </defs>
     <!-- Brush  -->
     <g
       bind:this={brushGroup}
@@ -145,13 +173,34 @@
           id={i}
           cx={x(data.date)}
           cy={y(data.count)}
-          r="7"
+          r="5"
           fill={isInTopN(data) ? "#4574cc" : "gray"}
           style="cursor: {isInTopN(data) ? 'pointer' : 'default'}"
           on:mouseover={event => handleMouseOver(event, data)}
           on:mouseout={handleMouseOut}
           on:click={() => handleClick(data)}
-        ></circle>{/each}
+        ></circle>
+        {#if !$isZoom}
+          {#if topNData[0]?.aid === data?.aid}
+            <line
+              class="annotation-line"
+              x1={x(data.date)}
+              y1={dimensions.boundedHeight / 4}
+              x2={x(data.date)}
+              y2={y(data.count) + 20}
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              class="anotation-text"
+              x={x(data.date) - 35}
+              y={dimensions.boundedHeight / 4 + 15}
+              style="fill: black;"
+            >
+              Click me!
+            </text>
+          {/if}
+        {/if}
+      {/each}
     </g>
 
     <!-- Axes  -->
@@ -182,29 +231,26 @@
   {#if hoveredData}
     <Tooltip {hoveredData} chart_type={"scatter"} />
   {/if}
-
-  <!-- Slider  -->
-  <div class="slider">
-    <label for="top-n-slider">Top N: {N}</label>
-    <input
-      type="range"
-      id="top-n-slider"
-      min="1"
-      max="100"
-      value={N}
-      on:input={handleSliderChange}
-      orient="vertical"
-    />
-  </div>
 </div>
 
 <style>
   .scatter-plot-wrapper {
-    display: inline-block;
-    vertical-align: bottom;
+    padding: 2em;
+    display: flex;
+    align-items: flex-start;
+    /* vertical-align: bottom; */
   }
 
   .slider {
-    height: 200px;
+    text-align: center;
+    /* margin-bottom: -0.8em; */
+    /*  */
+    /* width: 2em; */
+  }
+
+  .annotation-line {
+    stroke: rgb(0, 0, 0);
+    stroke-dasharray: 5, 5;
+    opacity: 0.5;
   }
 </style>

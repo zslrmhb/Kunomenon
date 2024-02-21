@@ -23,7 +23,7 @@
     height: 500,
     margin: {
       top: 20,
-      right: 20,
+      right: 0,
       bottom: 20,
       left: 90,
     },
@@ -99,38 +99,48 @@
 </script>
 
 <main>
-  <div class="heading">
-    <!-- <GoogleTranslate
-      elementId={"google-translate-element"}
-      options={{ pageLanguage: 'pt', includedLanguages: 'pt,en,zh-CN' }}
-    /> -->
-    <h1>
-      <a
-        href="https://github.com/zslrmhb/Kunomenon"
-        target="_blank"
-        id="bilibili">KUNomenon</a
-      >
-    </h1>
-    <h2>
-      The Trend Behind Top 3000+ <a
-        href="https://www.quora.com/Why-is-chicken-you-too-beautiful-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E-so-popular-in-China-recently"
-        target="_blank"
-        id="bilibili">Cai Xukun Videos</a
-      >
-      on
-      <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a>
-      #Chinese-Internet-Culture
-    </h2>
-    <Area
-      {dimensions}
-      {numVideoPerMonth}
-      {importantDates}
-      {tomCount}
-      {yoyoCount}
-      {yawCount}
-    />
-    <PlotContainer {dimensions} {videoInfo} {tagCount} />
+  <div class="content-container">
+    <div class="heading-container">
+      <h1>
+        <a
+          href="https://github.com/zslrmhb/Kunomenon"
+          target="_blank"
+          id="bilibili">KUNomenon</a
+        >
+      </h1>
+      <h2>
+        The Trend Behind Top 3000+ <a
+          href="https://www.quora.com/Why-is-chicken-you-too-beautiful-%E9%B8%A1%E4%BD%A0%E5%A4%AA%E7%BE%8E-so-popular-in-China-recently"
+          target="_blank"
+          id="bilibili">Cai Xukun Videos</a
+        >
+        on
+        <a href="http://bilibili.com" target="_blank" id="bilibili">Bilibili</a
+        >
+        #Chinese-Internet-Culture
+      </h2>
+    </div>
+    <p class="context-description">
+      Cai Xukun, alias KUN, is a Chinese pop idol who rose to fame on Bilibili
+      (video sharing site) with his song "Because You Are So Beautiful," known
+      for its misheard lyrics, his amusing yet iconic dance with the
+      basketball, the outfit, and the hairstyle. His prominence grew in the
+      controversy with him being selected as the Chinese NBA ambassador in
+      early 2019, and subsequently (for you to explore) on 2022. Up until
+      today, he still serve as a prominant figure in Chinese internet culture,
+      and the top parody source.
+    </p>
   </div>
+
+  <Area
+    {dimensions}
+    {numVideoPerMonth}
+    {importantDates}
+    {tomCount}
+    {yoyoCount}
+    {yawCount}
+  />
+  <PlotContainer {dimensions} {videoInfo} {tagCount} />
 </main>
 
 <style>
@@ -140,25 +150,59 @@
 
   h1,
   h2 {
-    text-align: left;
-    margin-left: 3%;
+    margin-left: 1%;
   }
 
   h1 {
     font-size: x-large;
+    color: white;
   }
+
   h2 {
     font-size: large;
+    color: white;
+  }
+
+  p {
+    font-size: medium;
+    color: white;
+  }
+  .content-container {
+    padding-top: 1em;
+    padding-left: 7em;
+    padding-right: 5em;
+    padding-bottom: 1em;
+    margin: -1em;
+    margin-bottom: 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(202, 135, 135);
+  }
+
+  .heading-container {
+    flex: 0 0 50%; /* Assign 30% of the space to the heading container */
+    margin: 0.5em; /* Adjust margins as needed */
+  }
+
+  .context-description {
+    flex: 0 0 50%; /* Assign 70% of the space to the paragraph */
+    text-align: left;
+    /* Additional styling for the paragraph */
   }
 
   #bilibili {
     color: #4574cc;
   }
 
-  /* .heading {
-    background-color: #c8f6e1;
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-  } */
+  @media screen and (max-width: 768px) {
+    .content-container {
+      flex-direction: column;
+    }
+
+    .heading-container,
+    .context-description {
+      flex-basis: 100%;
+    }
+  }
 </style>

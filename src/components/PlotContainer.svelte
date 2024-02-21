@@ -25,7 +25,6 @@
     </button>
   {/each}
 </div>
-
 {#if activeMetric !== "tagCount"}
   <Scatter {dimensions} {curDataset} {activeMetric} />
 {:else}
@@ -34,11 +33,16 @@
 
 <style>
   .dataset-controls {
-    text-align: left;
+    /* display: flex; */
+    text-align: center;
+    padding: 2em;
+    margin-top: -0.9em;
+    /* vertical-align: left; */
+    /* display:flex; */
   }
 
   .dataset-controls button {
-    display: inline-block;
+    /* display: inline-block; */
     margin: 0.5em;
     padding: 0.5em;
     border: none;
@@ -50,10 +54,5 @@
     font-weight: bold;
     color: #4574cc;
     /* border-color: #4574cc; */
-  }
-
-  .dataset-controls {
-    display: inline;
-    vertical-align: bottom;
   }
 </style>

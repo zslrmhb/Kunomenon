@@ -1,14 +1,14 @@
 <script>
   import * as d3 from "d3";
-  import { sharedXDomain } from "../store.js";
+  import { sharedXDomain, isZoom } from "../store.js";
   import Tooltip from "./Tooltip.svelte";
   export let dimensions;
   export let numVideoPerMonth, importantDates, tomCount, yoyoCount, yawCount;
 
   let activeDatasets = {
-    Tom: false,
-    Yoyo: false,
-    Yaw: false,
+    ProfessorTom: false,
+    BossChen: false,
+    YawFitness: false,
   };
 
   // Configures scales
@@ -31,7 +31,10 @@
     .area()
     .x(d => x(d.pubmonth))
     .y0(dimensions.boundedHeight)
-    .y1(d => y(d.count));
+    .y1(d => y(d.count))
+    .curve(d3.curveMonotoneX);
+
+  // Annotation
 
   // Interactivity
 
@@ -42,21 +45,41 @@
   function updateSmallChart() {
     combinedData = getCombinedData();
   }
-  // $: console.log(combinedData);
+
   function getCombinedData() {
     let data = numVideoPerMonth.map(d => ({
       pubmonth: d.pubmonth,
       count:
         0 +
-        (activeDatasets.Tom ? getCountOnDate(tomCount, d.pubmonth) : 0) +
-        (activeDatasets.Yoyo ? getCountOnDate(yoyoCount, d.pubmonth) : 0) +
-        (activeDatasets.Yaw ? getCountOnDate(yawCount, d.pubmonth) : 0),
+        (activeDatasets.ProfessorTom
+          ? getCountOnDate(tomCount, d.pubmonth)
+          : 0) +
+        (activeDatasets.BossChen ? getCountOnDate(yoyoCount, d.pubmonth) : 0) +
+        (activeDatasets.YawFitness ? getCountOnDate(yawCount, d.pubmonth) : 0),
     }));
     return data;
   }
   function getCountOnDate(dataset, month) {
     let entry = dataset.find(d => +d.pubmonth === +month);
     return entry ? entry.count : 0;
+  }
+
+  function interpolateYCoordinate(date) {
+    let i = 0;
+    while (
+      i < numVideoPerMonth.length - 1 &&
+      numVideoPerMonth[i].pubmonth < date
+    ) {
+      i++;
+    }
+    if (i === 0) return y(numVideoPerMonth[0].count);
+    if (i === numVideoPerMonth.length - 1) return y(numVideoPerMonth[i].count);
+
+    const start = numVideoPerMonth[i - 1];
+    const end = numVideoPerMonth[i];
+    const proportion =
+      (date - start.pubmonth) / (end.pubmonth - start.pubmonth);
+    return y(start.count + proportion * (end.count - start.count));
   }
 
   let hoveredData = null;
@@ -96,11 +119,13 @@
       const newDomain = [x.invert(selection[0]), x.invert(selection[1])];
       sharedXDomain.set(newDomain);
       d3.select(brushGroup).call(brush.move, null);
+      isZoom.set(true);
     }
   }
 
   function resetChart() {
     sharedXDomain.set(d3.extent(numVideoPerMonth, d => d.pubmonth));
+    isZoom.set(false);
   }
 
   // Sync Both the Area and Scatter plot
@@ -119,14 +144,13 @@
       .transition()
       .duration(500)
       .attr("d", area);
-    console.log(d3.select(".area-plot-wrapper #area-plot").selectAll("circle"));
     d3.select(".area-plot-wrapper #area-plot")
       .selectAll("circle")
       .data(importantDates)
       .transition()
       .duration(500)
       .attr("cx", d => x(d.date))
-      .attr("cy", y(-8));
+      .attr("cy", d => interpolateYCoordinate(d.date));
   }
 </script>
 
@@ -137,26 +161,31 @@
     height={dimensions.height}
     viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
     style="max-width: 100%; height: auto;"
-  >
+    ><defs>
+      <marker
+        id="arrowhead"
+        markerWidth="10"
+        markerHeight="7"
+        refX="0"
+        refY="3.5"
+        orient="auto"
+      >
+        <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+      </marker>
+    </defs>
+
+    <!-- The Brush -->
+    <g
+      bind:this={brushGroup}
+      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
+    ></g>
     <!-- The Data Points -->
     <g
       transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
     >
       <!-- The Area Chart! -->
-      <path
-        class="main-plot"
-        d={area(numVideoPerMonth)}
-        fill="#cce5df"
-        stroke="#69b3a2"
-        stroke-width="1.5"
-      />
-      <path
-        class="combined-plot"
-        d={area(combinedData)}
-        fill="blue"
-        stroke="#69b3a2"
-        stroke-width="1.5"
-      />
+      <path class="main-plot" d={area(numVideoPerMonth)} />
+      <path class="combined-plot" d={area(combinedData)} />
 
       <!-- Important Dates -->
       <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -167,8 +196,8 @@
         <circle
           id={i}
           cx={x(data.date)}
-          cy={y(-8)}
-          r="7"
+          cy={interpolateYCoordinate(data.date)}
+          r="5"
           fill="red"
           style="cursor: {'pointer'}"
           on:mouseover={event => handleMouseOver(event, data)}
@@ -176,14 +205,28 @@
           on:click={() => handleClick(data)}
         >
         </circle>
+        {#if !$isZoom}
+          {#if i == 2}
+            <line
+              class="annotation-line"
+              x1={x(data.date)}
+              y1={interpolateYCoordinate(data.date) - 70}
+              x2={x(data.date)}
+              y2={interpolateYCoordinate(data.date) - 15}
+              marker-end="url(#arrowhead)"
+            />
+            <text
+              class="anotation-text"
+              x={x(data.date) - 30}
+              y={interpolateYCoordinate(data.date) - 75}
+              style="fill: black;"
+            >
+              Click me!
+            </text>
+          {/if}
+        {/if}
       {/each}
     </g>
-
-    <!-- The Brush -->
-    <g
-      bind:this={brushGroup}
-      transform={`translate(${dimensions.margin.left}, ${dimensions.margin.top})`}
-    ></g>
 
     <!-- The Axes -->
     <g
@@ -206,24 +249,33 @@
         Video Count
       </text>
     </g>
-  </svg>
 
-  <div class="buttons-container">
-    <h3>Top 3 Content Creators:</h3>
-    {#each Object.keys(activeDatasets) as datasetName}
-      <div class="button-row">
-        <button
-          class:active={activeDatasets[datasetName]}
-          on:click={() => {
-            activeDatasets[datasetName] = !activeDatasets[datasetName];
-            updateSmallChart();
-          }}
+    <g
+      class="buttons-group"
+      transform={`translate(${dimensions.margin.left + 20}, ${
+        dimensions.margin.top + 20
+      })`}
+    >
+      <text class="creator-title" style="font-size: 15px; fill: black"
+        >Top 3 content creators</text
+      >
+
+      {#each Object.keys(activeDatasets) as datasetName, index}
+        <foreignObject x="-10" y={index * 25} width="200" height="30">
+          <button
+            xmlns="http://www.w3.org/1999/xhtml"
+            class:active={activeDatasets[datasetName]}
+            on:click={() => {
+              activeDatasets[datasetName] = !activeDatasets[datasetName];
+              updateSmallChart();
+            }}
+          >
+            {datasetName}
+          </button></foreignObject
         >
-          {datasetName}
-        </button>
-      </div>
-    {/each}
-  </div>
+      {/each}
+    </g>
+  </svg>
 
   <!-- Tooltip  -->
   {#if hoveredData}
@@ -232,25 +284,55 @@
 </div>
 
 <style>
-  .buttons-container button {
-    /* Basic styling */
-    margin: 0.5em;
-    padding: 0.5em;
-    border: 1px solid #ccc;
-    background-color: white;
-    cursor: pointer;
+  h3 {
+    font-size: 0.5em;
   }
 
-  .buttons-container button.active {
+  /* .creator-title {
+    margin: 1em;
+  } */
+  .area-plot-wrapper {
+    padding-top: 2em;
+    padding-left: 2em;
+    /* display: flex; */
+    /* align-items: flex-start; */
+    /* justify-content: space-between; */
+  }
+
+  .main-plot {
+    fill: #cce5df; /* Light green fill */
+    stroke: #69b3a2; /* Darker green border */
+    stroke-width: 0.15em; /* Line thickness */
+  }
+
+  .combined-plot {
+    fill: #fdf8f6;
+    stroke: #d86e41;
+    stroke-width: 0.15em;
+  }
+
+  .buttons-group button {
+    /* margin: 0.3em; */
+    padding: 0.05em 0.6em;
+    border: 0.05em solid #8a5959;
+    margin: 0.7em;
+    background-color: rgb(241, 233, 233);
+    cursor: pointer;
+    border-radius: 0.5em;
+  }
+
+  .buttons-group button.active {
     /* Active button styling */
     color: white;
-    background-color: #4574cc;
-    border-color: #4574cc;
+    background-color: #d86e41;
+    border: none;
+    transform: scale(1);
+    /* border-color: #4574cc; */
   }
 
-  .button-row {
-    display: flex;
-    align-items: center;
-    /* margin-bottom: 10px; Space between rows */
+  .annotation-line {
+    stroke: rgb(0, 0, 0);
+    stroke-dasharray: 5, 5;
+    opacity: 0.5;
   }
 </style>
