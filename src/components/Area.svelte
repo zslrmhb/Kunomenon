@@ -312,7 +312,6 @@
     color: white;
     background-color: #d86e41;
     border: none;
-    transform: scale(1);
   }
 
   .annotation-line {
