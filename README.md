@@ -1,58 +1,31 @@
-# create-svelte
+# KUNomenon
 
-## Generate static site using svelte SSG
+## <u>The Trend Behind Top 3000+ Cai Xukun Videos on Bilibili</u> #Chinese-Internet-Culture
+![Cai XuKun playing basketball](https://media.tenor.com/_RoZtOoGCoQAAAAM/蔡徐坤籃球-cai-xukun.gif)
 
-To assist you in creating a static webpage for GitHub Pages using Svelte, we have developed a template for you: [ShaokangJiang/svelte-template (github.com)](https://github.com/ShaokangJiang/svelte-template).
-
-Please follow the link provided, and initiate the creation of a new repository.
-
-![image-20240210175403813](./assets/image-20240210175403813.png)
-
-After GitHub completes the cloning process, navigate to the settings page. On the left panel, under the "Pages" tab, locate the "Source" section and select "GitHub Actions" as the source. 
-
-Clone this repository and proceed with your work. Upon completion, commit and push your changes. The corresponding GitHub Actions will then execute, building a static website hosted at `https://your-username.github.io/your-repo-name` for you.
-
-![image-20240210175104365](./assets/image-20240210175104365.png)
-
-### Migrate from your project
-
-If you have started on the project and want to switch to using this template, you can copy your `src` folder, go to the local clone of your version of this template, then paste it. When it says the file exists, simply click replace, and you can continue working on your version of this template.
+### Research Question and Approach
+With our research question centered on understanding how the current internet culture is driven, we directed our focus toward an event that has been trending in the internet culture of China. Bilibili is a video platform in China that is similar to YouTube, where people can make and publish videos online. This leads to our question: Trending Cai XuKun Parody videos on Bilibili: What is the trend? Our data was scraped from Bilibili with an API, and the video that was obtained contains relevant information about the event. Some attributes of the videos are the number of views, likes, and reviews about each video. Also, information on the tag that each video is under is contained in the data. All the preprocessing was done in /Python and the cleaned dataset was stored as CSV and then read in to form the desired visualizations. 
+To be able to see the overall trend of the videos across time, we designed two different visualizations. One is an area plot symbolizing the total count of the videos that were published about Cai XuKun with respect to time. Area plot is chosen to convey the theme of quantity, where the viewers can use that shaded area apart from just a line plot to see the overall trend of the event. From this visualization, we see that the number of videos that were made about Cai XuKun peaked around July 2022. 
 
 
+### Scatter Plot
+In a scatter plot below, each point represents a single video that was made, and this provides more insight into the trend of how popular the event is overall. The choice of having all videos present in the scatter plot allows for the audience to directly observe clusters within the data. There are also different categories on the right of the plot that let the audience pick and choose which aspect of the video they want to see. Many factors contribute to the overall effectiveness of a video, and it should be accessed across multiple standards, not just the number of views. The categories contain information about the number of plays, like, review, duration, danmaku (comments posted about the video that is displayed synchronized to the video timeline), tags, and types. 
+An interaction technique of having a slider that filters out the top n data points within the scatter plot can let the audience get a more direct sense of the overall performance of the video under this category and provides a more direct outline for which videos appear more influential for the event. All other categories except for tag and type are scatter plots. 
+### Heatmap
+Due to the fact that tags contain categorical data, it is visualized as a heatmap. The heat map contains information about the five top popular tags that have developed over time to symbolize the event. The categories are Cai XuKun (蔡徐坤, the artist's name), Beautiful (鸡你太美, a catchy rhythm that was popularized in the event), Anti-Fan (小黑子, to describe a category of viewpoints about the event), What (你干嘛, more directly translates to what are you doing, and is another catchy rhythm), Basketball (篮球, key factor of the video that the event was originated from). These top five tags were taken into consideration and the count of each tag is computed with respect to each month. A heatmap was chosen apart from the continuation and use of a scatter plot to clearly demonstrate the difference within the five categories. At the same time, a heatmap is more direct in terms of overall trend in time. Where we are observing similar trends with the usage of tags peaking in July of 2022. 
+### Radar Chart
+From Bilibili, when the videos are published it is usually published under a type that the author can assign to. In this design of the graph, we aim to assess how the purpose of the video changes as this event progresses. A Radar chart was chosen to see the percentage of videos that were published under the five categories, Entertainment, Daily, Theater, Autotune, and Comedy. The percentage of videos from a single year was chosen as the scale to standardize among the different years, as each year may have different amounts of videos. When the count is used, then it does not allow for a comparison between the years since it is weighted by the amount of videos published. Interaction techniques were applied to the radar chart with a slider that gives comparison between two years. From this chart, we can see the trend as this event is leading from entertainment to more videos being published under comedy or autotune. 
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+### Interactive Designs
+There are 3445 videos included in this visualization and the first occurrences were noted in 2016, to allow the audience to have a more clear understanding of the trend of the overall videos the interaction that was chosen is to allow zoom in to the graph around specific date ranges, and to keep the visualization consistent in both graphs, when one graph is zoomed in the other follows the same zooming technique. 
+For visualization that consists of a large space(e.g. area plot), we choose color with low luminance and saturation to improve the audience’s viewing experience. For visualizations that aim to stand out, we choose high-luminance colors to highlight them, and we choose low-luminance colors for auxiliary components. 
 
-## Creating a project 
+### Acknowledgements of limitations 
 
-If you're seeing this, you've probably already done this step. Congrats!
+This visualization requires some domain knowledge for the audience to be able to use it effectively. With the heading in the graph, we provided context information and made it available for the audience to read more about it. However, to someone completely unfamiliar with anything related to this event it may take them longer to first understand then they can interpret and interact with the visualizations more effectively. At the same time, there is also the language barrier where the visualization is trying to demonstrate the overall trend of the event on the Chinese Internet. For the general audience, it might be confusing with the difference in language and culture. 
+### Development process
+Hongbin: 
+I mainly focus on the overall code structure and style(took about 15 - 20 hours). I implemented the area plot and scatter plot with interaction. More specifically, interactions that involve hovering and zooming. The part that took the most time was the interaction with D3.js in Svelte. First, it is a time commitment to learn D3.js for this project on top of HTML, CSS and Javascript. Second, most of the resources online only focus on d3.js itself but I can hardly find any example that combines D3.js with Svelte.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Qirui: 
+I mainly focused on the implementation of the heatmap and radar chart, along with the documentation. For me, this project took around 15-20 hours of contribution. During the development process what I found that took the most time was understanding the overall structure of the visualization. I was able to create the graph at first, but it took me a long time to understand how everything comes together and gets drawn on the page. After understanding the overall structure of the visualization I was able to debug my code faster and try out different ideas for the visualization. 
