@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import Area from "./Area.svelte";
   import PlotContainer from "./PlotContainer.svelte";
+  import Radar from "./Radar.svelte";
 
   // import { GoogleTranslate } from "@candidosales/svelte-google-translate";
 
@@ -21,7 +22,7 @@
   // Configures dimensions
   let dimensions = {
     width: 1000,
-    height: 500,
+    height: 600,
     margin: {
       top: 30,
       right: 0,
@@ -30,10 +31,25 @@
     },
   };
 
+  let radarDim = {
+    width: 600,
+    height: 600,
+    margin: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    },
+  };
+
   dimensions.boundedWidth =
     dimensions.width - dimensions.margin.left - dimensions.margin.right;
   dimensions.boundedHeight =
     dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
+  radarDim.boundedWidth =
+    radarDim.width - radarDim.margin.left - radarDim.margin.right;
+  radarDim.boundedHeight =
+    radarDim.height - radarDim.margin.top - radarDim.margin.bottom;
 
   // Load Data
   onMount(async () => {
@@ -93,7 +109,7 @@
     window.addEventListener("resize", updateSize);
     updateSize();
   });
-
+  // const s = 0.6;
   // Reponsive Chart
   function updateSize() {
     dimensions.width = window.innerWidth * 0.9;
@@ -154,7 +170,7 @@
     {yoyoCount}
     {yawCount}
   />
-  <PlotContainer {dimensions} {videoInfo} {tagCount} {typeCount}/>
+  <PlotContainer {dimensions} {radarDim} {videoInfo} {tagCount} {typeCount} />
 </main>
 
 <style>

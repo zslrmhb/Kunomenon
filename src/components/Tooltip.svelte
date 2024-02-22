@@ -68,6 +68,17 @@
   >
     Tag {hoveredData.variable}: {hoveredData.value}
   </div>
+  {:else if chart_type === "radar"}
+   <div
+    class="tooltip-heatmap"
+    use:tooltipAction
+    style="left: {hoveredData.recorded_mouse_position.x - tooltipWidth / 2}px; 
+           top: {hoveredData.recorded_mouse_position.y -
+      tooltipHeight -
+      15}px;"
+  >
+    HELP!
+  </div>
 {/if}
 
 <style>

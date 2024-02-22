@@ -116,7 +116,8 @@
 
 <style>
   .heatmap-plot-wrapper {
-    display: inline-block;
-    vertical-align: bottom;
+    padding-top: 2em;
+    padding-left: 2em;
+    padding-bottom: 2em;
   }
 </style>

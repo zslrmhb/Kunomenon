@@ -285,10 +285,6 @@
   .area-plot-wrapper {
     padding-top: 2em;
     padding-left: 2em;
-    /* padding-right: -1em; */
-    /* display: flex; */
-    /* align-items: flex-start; */
-    /* justify-content: space-between; */
   }
 
   .main-plot {

@@ -1,12 +1,9 @@
 <script>
   import * as d3 from "d3";
   export let typeCount;
-
-  //$: console.log('typeCount', typeCount);
+  export let radarDim;
 
   //set dimensions
-  let width = 600;
-  let height = 600;
   let yearVal;
   let uniqueYear;
   let filterYear;
@@ -16,8 +13,6 @@
   $: filterYear = typeCount.filter(d => {
     return d.year === yearVal || d.year === yearVal + 1;
   });
-
-  //console.log('filterYear', filterYear);
 
   // get the data
   let data = [];
@@ -41,10 +36,6 @@
   data[0] = dictionary;
   data[1] = dictionary2;
 
-  console.log("data", data);
-
-  //$: console.log('yearList', uniqueYearArray);
-
   //Scale the figure
   $: radialScale = d3.scaleLinear().domain([0, 75]).range([0, 200]);
 
@@ -54,7 +45,7 @@
   function angleToCoordinate(angle, value) {
     let x = Math.cos(angle) * radialScale(value);
     let y = Math.sin(angle) * radialScale(value);
-    return { x: width / 2 + x, y: height / 2 + y };
+    return { x: radarDim.width / 2 + x, y: radarDim.height / 2 + y };
   }
 
   //get features
@@ -78,28 +69,17 @@
     .curve(d3.curveLinearClosed);
 
   //plot the data
-  $: color = ["darkorange", "green"];
+  $: color = ["#d86e41", "#69b3a2"];
 
   function getPathCoordinate(data_point) {
-    console.log("data_point", data_point);
-    console.log("type: data_point", typeof data_point);
-
-    for (let key in data_point) {
-      console.log("key: data_point", key);
-    }
-
     let coordinates = [];
     if (data_point) {
       for (var i = 0; i < features.length; i++) {
         let ft_name = features[i];
-        console.log("ft_name", ft_name);
         let angle = Math.PI / 2 + (2 * Math.PI * i) / features.length;
-        //console.log('angle', angle);
-        console.log("data_point[ft_name]", data_point["Autotune"]);
         coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
       }
     }
-    console.log("coordinates", coordinates);
     return coordinates;
   }
 
@@ -128,8 +108,6 @@
     });
     data.unshift(dictionary2);
     data.unshift(dictionary);
-    //console.log('filterYear', filterYear);
-    //console.log('dataChange', data);
 
     yearList = filterYear.map(d => String(d.year));
     uniqueYear = new Set(yearList);
@@ -143,7 +121,7 @@
 </script>
 
 <div class="slider">
-  <label for="year-slider">From year {yearVal} and {yearVal + 1}</label>
+  <label for="year-slider">Year {yearVal} and {yearVal + 1}</label>
   <input
     type="range"
     id="year-sliderr"
@@ -156,26 +134,47 @@
 </div>
 
 <div class="radar-plot-wrapper">
-  <svg id="radar-plot" {width} {height}>
+  <svg
+    id="radar-plot"
+    width={radarDim.width}
+    height={radarDim.height}
+    viewBox={`0 0 ${radarDim.width} ${radarDim.height}`}
+    style="max-width: 100%; height: auto;"
+  >
+    {#each data as d, i}
+      <path
+        d={line(getPathCoordinate(d))}
+        stroke-width={3}
+        stroke={color[i]}
+        fill={color[i]}
+        stroke-opacity={1}
+        opacity={0.5}
+      >
+      </path>
+    {/each}
     {#each ticks as data, i}
       <circle
         id={i}
-        cx={width / 2}
-        cy={height / 2}
+        cx={radarDim.boundedWidth / 2}
+        cy={radarDim.boundedHeight / 2}
         r={radialScale(data)}
         fill="none"
         stroke="black"
       >
       </circle>
-      <text x={width / 2} y={height / 2 - radialScale(data)} dy="0.35em">
+      <text
+        x={radarDim.width / 2 - 10}
+        y={radarDim.height / 2 - radialScale(data) - 9}
+        dy="0.35em"
+      >
         {data}{"%"}
       </text>
     {/each}
     {#each featureData as data, i}
       <line
         id={i}
-        x1={width / 2}
-        y1={height / 2}
+        x1={radarDim.boundedWidth / 2 }
+        y1={radarDim.boundedHeight / 2}
         x2={data.line_coord.x}
         y2={data.line_coord.y}
         stroke="black"
@@ -194,19 +193,8 @@
         {data.name}
       </text>
     {/each}
-    {#each data as d, i}
-      <path
-        d={line(getPathCoordinate(d))}
-        stroke-width={3}
-        stroke={color[i]}
-        fill={color[i]}
-        stroke-opacity={1}
-        opacity={0.5}
-      >
-      </path>
-    {/each}
 
-    <!-- Legend -->
+    Legend
     <g class="legend" transform="translate(20, 20)">
       {#each uniqueYearArray as d, i}
         <text id={i} x={0} y={i * 30} dt={"0.35em"}>{d}</text>
@@ -220,6 +208,12 @@
 <style>
   .radar-plot-wrapper {
     display: flex;
-    padding: 2em;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .slider {
+    text-align: center;
   }
 </style>
