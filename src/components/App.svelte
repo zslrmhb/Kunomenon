@@ -5,8 +5,6 @@
   import PlotContainer from "./PlotContainer.svelte";
   import Radar from "./Radar.svelte";
 
-  // import { GoogleTranslate } from "@candidosales/svelte-google-translate";
-
   // Data Container
   let numVideoPerMonth = [];
   let importantDates = [];
@@ -25,7 +23,7 @@
     height: 600,
     margin: {
       top: 30,
-      right: 0,
+      right: 90,
       bottom: 20,
       left: 90,
     },

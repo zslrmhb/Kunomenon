@@ -300,7 +300,6 @@
   }
 
   .buttons-group button {
-    /* margin: 0.3em; */
     padding: 0.05em 0.6em;
     border: 0.05em solid #8a5959;
     margin: 0.7em;
@@ -310,12 +309,10 @@
   }
 
   .buttons-group button.active {
-    /* Active button styling */
     color: white;
     background-color: #d86e41;
     border: none;
     transform: scale(1);
-    /* border-color: #4574cc; */
   }
 
   .annotation-line {

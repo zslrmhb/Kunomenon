@@ -238,14 +238,10 @@
     padding: 2em;
     display: flex;
     align-items: flex-start;
-    /* vertical-align: bottom; */
   }
 
   .slider {
     text-align: center;
-    /* margin-bottom: -0.8em; */
-    /*  */
-    /* width: 2em; */
   }
 
   .annotation-line {

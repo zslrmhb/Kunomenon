@@ -2,7 +2,6 @@
   import Scatter from "./Scatter.svelte";
   import Heatmap from "./Heatmap.svelte";
   import Radar from "./Radar.svelte";
-  import Tooltip from "./Tooltip.svelte";
   export let dimensions, radarDim;
   export let videoInfo, tagCount, typeCount;
 
@@ -16,7 +15,6 @@
   }));
 
   // Tooltip
-
   let showTooltip = false;
   let recorded_mouse_position = { x: 0, y: 0 };
 
@@ -66,16 +64,12 @@
 
 <style>
   .dataset-controls {
-    /* display: flex; */
     text-align: center;
     padding: 2em;
     margin-top: -0.9em;
-    /* vertical-align: left; */
-    /* display:flex; */
   }
 
   .dataset-controls button {
-    /* display: inline-block; */
     margin: 0.5em;
     padding: 0.5em;
     border: none;
@@ -86,7 +80,6 @@
   .dataset-controls button.active {
     font-weight: bold;
     color: #4574cc;
-    /* border-color: #4574cc; */
   }
 
   .help-icon {
@@ -99,7 +92,7 @@
     background-color: #4574cc;
     color: white;
     border-radius: 50%;
-    cursor: pointer;
+    cursor: default;
   }
 
   .tooltip {
@@ -111,20 +104,8 @@
     font-family: "Nunito", sans-serif;
     width: 20%;
     padding: 1em;
-    border: 1px solid #ccc; /* Light grey border */
+    border: 1px solid #ccc; 
     border-radius: 5px;
     text-align: left;
   }
-  /* .tooltip {
-    position: absolute;
-    left: 50%; /* Adjust as needed */
-  /* transform: translateX(-50%); Center the tooltip */
-  /* bottom: 100%; */
-  /* margin-bottom: 10px; Distance from icon */
-  /* background-color: black; */
-  /* color: white; */
-  /* padding: 0.5em; */
-  /* border-radius: 4px; */
-  /* white-space: nowrap; */
-  /* } */
 </style>
